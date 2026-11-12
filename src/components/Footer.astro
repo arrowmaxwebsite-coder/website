@@ -91,6 +91,8 @@ const year = new Date().getFullYear();
   .footer__bar {
     display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
     padding-block: 1.6rem; border-top: 1px solid var(--line-dark); font-size: .9rem; color: rgba(255, 255, 255, .6);
+    /* leave room under the last row so the floating chat button never sits on top of the legal links */
+    padding-bottom: calc(5.2rem + env(safe-area-inset-bottom));
   }
   .footer__legal { display: flex; gap: 1.5rem; }
   .footer__legal a { text-decoration: none; }
