@@ -3,11 +3,11 @@ import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import type { Service } from '../data/content';
 
-interface Props { service: Service; index?: number; delay?: number }
-const { service: s, index, delay = 0 } = Astro.props;
+interface Props { service: Service; index?: number; delay?: number; /** shorter photo, for the homepage */ compact?: boolean }
+const { service: s, index, delay = 0, compact = false } = Astro.props;
 ---
 
-<li class="svc" data-reveal style={`--d:${delay}s`}>
+<li class:list={['svc', compact && 'svc--compact']} data-reveal style={`--d:${delay}s`}>
   <div class="svc__img">
     <Image src={s.image} alt={s.imageAlt} widths={[420, 640]} sizes="(min-width: 980px) 380px, (min-width: 620px) 45vw, 92vw" loading="lazy" />
     {index !== undefined && <span class="svc__num">0{index + 1}</span>}
@@ -27,6 +27,28 @@ const { service: s, index, delay = 0 } = Astro.props;
   }
   .svc:hover { transform: translateY(-6px); box-shadow: var(--shadow-2); border-color: rgba(78, 199, 238, .6); }
   .svc__img { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--navy-900); }
+  .svc--compact .svc__img { aspect-ratio: 16 / 10; }
+  @media (max-width: 980px) { .svc--compact .svc__img { aspect-ratio: 2.1 / 1; } }
+  /* Phones: two-up photo + title tiles (descriptions live on each service's page), so six services stay short */
+  @media (max-width: 620px) {
+    .svc--compact .svc__img { aspect-ratio: 4 / 3; }
+    .svc--compact .svc__body { padding: .85rem .9rem 1rem; gap: .2rem; }
+    .svc--compact .svc__body p, .svc--compact .svc__more, .svc--compact .svc__icon { display: none; }
+    .svc--compact .svc__body h3 { font-size: 1rem; line-height: 1.2; }
+    .svc--compact .svc__num { top: .5rem; left: .5rem; font-size: .62rem; padding: .22rem .5rem; }
+  }
+  /* Desktop: photo beside text, so six services take three short rows instead of two tall ones */
+  @media (min-width: 981px) {
+    .svc--compact { flex-direction: row; }
+    .svc--compact .svc__img { flex: 0 0 40%; aspect-ratio: auto; min-height: 11rem; }
+    /* pin the photo inside its box so tall portrait photos can't stretch the card; the text sets the height */
+    .svc--compact .svc__img :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .svc--compact .svc__img::after { height: 100%; background: linear-gradient(90deg, transparent 55%, rgba(0, 23, 48, .25)); }
+    .svc--compact .svc__body { padding: 1.5rem 1.6rem; align-content: center; }
+    .svc--compact .svc__icon { top: 1.2rem; right: 1.2rem; width: 2.7rem; height: 2.7rem; border-radius: 13px; }
+    .svc--compact .svc__icon :global(svg) { width: 1.3rem; height: 1.3rem; }
+    .svc--compact .svc__body h3 { padding-right: 3rem; }
+  }
   .svc__img :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease); }
   .svc:hover .svc__img :global(img) { transform: scale(1.07); }
   .svc__img::after { content: ''; position: absolute; inset: auto 0 0 0; height: 45%; background: linear-gradient(0deg, rgba(0, 23, 48, .55), transparent); }

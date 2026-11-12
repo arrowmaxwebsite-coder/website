@@ -39,8 +39,9 @@
   --shadow-1: 0 1px 2px rgba(0, 23, 48, 0.06), 0 10px 28px -10px rgba(0, 23, 48, 0.16);
   --shadow-2: 0 30px 70px -24px rgba(0, 23, 48, 0.45);
 
-  /* Content width grows with the screen (1200px on laptops → 1560px on big monitors) so wide displays aren't a narrow centered column */
-  --container: clamp(1200px, 86vw, 1560px);
+  /* Content width grows with the screen (1200px on laptops → 1440px on big monitors): wide enough that big displays
+     aren't a narrow column, narrow enough that cards and text lines don't stretch */
+  --container: clamp(1200px, 82vw, 1440px);
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
   --header-h: 72px;
   --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
@@ -100,7 +101,7 @@ h1, h2, h3, h4, p, figure, blockquote { margin: 0; }
 
 /* ---------- layout ---------- */
 .container { width: min(100% - 2 * var(--gutter), var(--container)); margin-inline: auto; }
-.section { padding-block: clamp(4rem, 8vw, 7.5rem); position: relative; }
+.section { padding-block: clamp(3.5rem, 6.5vw, 6rem); position: relative; }
 .section--tight { padding-block: clamp(3rem, 6vw, 5rem); }
 .section--paper { background: var(--paper); }
 .section--aqua { background: linear-gradient(180deg, var(--aqua-100), #f6fdfd); }
@@ -238,6 +239,8 @@ h3 { font-weight: 680; line-height: 1.15; font-size: clamp(1.25rem, 1.05rem + 0.
 .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
 @media (max-width: 980px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 620px) { .svc-grid { grid-template-columns: 1fr; } }
+@media (min-width: 981px) { .svc-grid--rows { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .svc-grid--rows { grid-template-columns: repeat(2, 1fr); gap: .8rem; } }
 .county-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
 @media (max-width: 900px) { .county-grid { grid-template-columns: 1fr; } }
 

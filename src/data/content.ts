@@ -169,6 +169,14 @@ export const REVIEWS: Review[] = [
 
 export interface Resource {
   n: string;
+  /** anchor on the Resources page */
+  slug: string;
+  /** service page this resource leads to */
+  service: string;
+  /** label for the service link */
+  cta: string;
+  /** one sentence on what ArrowMax does about it (taken from the service copy) */
+  action: string;
   title: string;
   body: string;
   image: ImageMetadata;
@@ -178,6 +186,10 @@ export interface Resource {
 export const RESOURCES: Resource[] = [
   {
     n: '01',
+    slug: 'carpet',
+    service: 'carpet-cleaning',
+    cta: 'Carpet cleaning',
+    action: 'ArrowMax lifts deep-set dirt, stains, and allergens from your carpets so your floors look and feel fresh again.',
     title: "What's living in your carpet",
     body: 'Dirt, grease, pollen, bacteria, dust mites, and pet dander all settle deep into carpet fibers over time. This 200x zoom comparison shows the difference between untreated and professionally cleaned carpet fibers.',
     image: fibersImg,
@@ -185,6 +197,10 @@ export const RESOURCES: Resource[] = [
   },
   {
     n: '02',
+    slug: 'pet-urine',
+    service: 'pet-urine-treatment',
+    cta: 'Pet urine treatment',
+    action: "ArrowMax treats the carpet and padding underneath to remove what's actually causing the smell, not mask it.",
     title: 'Why pet urine needs more than a surface clean',
     body: "Urine doesn't stay on top of the carpet. It moves through the fibers and backing and into the padding and sub-floor below, which is why surface sprays alone rarely solve the problem.",
     image: urineImg,
@@ -192,6 +208,10 @@ export const RESOURCES: Resource[] = [
   },
   {
     n: '03',
+    slug: 'mattress',
+    service: 'upholstery-cleaning',
+    cta: 'Upholstery cleaning',
+    action: 'ArrowMax lifts everyday dirt, oils, and odors from sofas, chairs, and cushions without soaking them or leaving a residue.',
     title: "What's building up in your mattress",
     body: 'Mattresses collect allergens, dust mites, bacteria, and skin cells over years of daily use. Regular deep cleaning of carpets and upholstery helps reduce the same buildup throughout the rest of your home.',
     image: mattressImg,
@@ -253,7 +273,6 @@ export const FAQS: Faq[] = [
   },
   {
     cat: 'services',
-    home: true,
     tags: ['carpet-cleaning', 'upholstery-cleaning'],
     q: 'Will cleaning help with allergens?',
     a: "Dirt, pollen, dust mites, bacteria, and pet dander settle deep into carpet and upholstery over time. A professional deep clean reaches what everyday cleaning can't, which removes allergens and helps improve the air quality in your home.",
@@ -286,7 +305,6 @@ export const FAQS: Faq[] = [
   },
   {
     cat: 'services',
-    home: true,
     tags: ['rug-cleaning', 'upholstery-cleaning'],
     q: 'Do you clean upholstery and area rugs too?',
     a: 'Yes. We clean sofas, chairs, and cushions without soaking them or leaving a residue, and we clean area rugs of all sizes and materials in place, so there is no wait for an off-site cleaner.',

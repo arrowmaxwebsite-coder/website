@@ -4,30 +4,29 @@ import Icon from '../components/Icon.astro';
 import Swoosh from '../components/Swoosh.astro';
 import Ticker from '../components/Ticker.astro';
 import BeforeAfter from '../components/BeforeAfter.astro';
-import StaticPair from '../components/StaticPair.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import FaqList from '../components/FaqList.astro';
 import CtaBand from '../components/CtaBand.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import CountyCard from '../components/CountyCard.astro';
 import ReviewCard from '../components/ReviewCard.astro';
-import { Image } from 'astro:assets';
 import { SITE, COUNTIES } from '../config';
-import { SERVICES, REVIEWS, RESOURCES } from '../data/content';
+import { SERVICES, REVIEWS } from '../data/content';
 
-import hallwayBefore from '../assets/photos/ba-hallway-before.jpg';
-import hallwayAfter from '../assets/photos/ba-hallway-after.jpg';
-import spotsBefore from '../assets/photos/ba-spots-before.jpg';
-import spotsAfter from '../assets/photos/ba-spots-after.jpg';
 import brownWideBefore from '../assets/photos/ba-brown-wide-before.jpg';
 import brownWideAfter from '../assets/photos/ba-brown-wide-after.jpg';
-import officeBefore from '../assets/photos/ba-office-before.jpg';
-import officeAfter from '../assets/photos/ba-office-after.jpg';
 
 const steps = [
   { t: 'Tell us about your floors', d: 'Send the quick request form or give us a call. Tell us what needs cleaning and where you are.' },
   { t: 'Get a straight answer on price', d: 'A free quote with no pressure and no surprises. You decide if it’s right for you.' },
   { t: 'We show up and get it done', d: 'Careful with your home, honest about the results, and your floors left looking better than when we arrived.' },
+];
+
+/* The homepage stays short on purpose: each of these has a full page of its own. */
+const explore = [
+  { href: '/gallery', icon: 'sparkles', kicker: 'Our work', title: 'See the difference', text: 'Real before & after photos from local jobs.' },
+  { href: '/resources', icon: 'eye', kicker: 'Resources', title: 'Know what you’re dealing with', text: 'What builds up in carpet, padding and furniture.' },
+  { href: '/about/mission-and-values', icon: 'shield', kicker: 'About us', title: 'Veteran owned & operated', text: 'Our mission, values and roots in the industry.' },
 ];
 ---
 
@@ -97,13 +96,13 @@ const steps = [
         <a class="link-arrow" href="/services">View all services <Icon name="arrow" /></a>
       </div>
 
-      <ul class="svc-grid">
-        {SERVICES.map((s, i) => <ServiceCard service={s} index={i} delay={(i % 3) * 0.08} />)}
+      <ul class="svc-grid svc-grid--rows">
+        {SERVICES.map((s, i) => <ServiceCard service={s} index={i} delay={(i % 2) * 0.08} compact />)}
       </ul>
     </div>
   </section>
 
-  <!-- ============================== WHY / HOW ============================== -->
+  <!-- ============================== HOW IT WORKS ============================== -->
   <section class="section section--navy why on-dark">
     <div class="why__bg" aria-hidden="true"><Swoosh id="why" animate={false} /></div>
     <div class="container why__grid">
@@ -114,11 +113,6 @@ const steps = [
           When your floors need professional attention, you want a company that shows up, does the job right, and leaves
           your home looking better than when they arrived. That’s what ArrowMax is here for.
         </p>
-        <ul class="why__points">
-          <li><span><Icon name="home" /></span><div><strong>Local, and proud of it</strong><p>People in our communities deserve a local floor cleaning company they can actually trust.</p></div></li>
-          <li><span><Icon name="tag" /></span><div><strong>A straight answer on price</strong><p>No surprises, no shortcuts, no upselling. Just clean floors and an honest experience start to finish.</p></div></li>
-          <li><span><Icon name="sparkles" /></span><div><strong>The right method for every surface</strong><p>Ground-in carpet stains, grimy grout, dull hardwood: each gets the solution it actually needs.</p></div></li>
-        </ul>
         <a class="vet-callout" href="/about/mission-and-values">
           <span class="vet-callout__icon"><Icon name="shield" /></span>
           <span class="vet-callout__txt">
@@ -127,6 +121,7 @@ const steps = [
           </span>
           <Icon name="arrow" class="vet-callout__go" />
         </a>
+        <a class="link-arrow" href="/about">More about ArrowMax <Icon name="arrow" /></a>
       </div>
 
       <div class="how" data-reveal style="--d:.1s">
@@ -146,88 +141,14 @@ const steps = [
     </div>
   </section>
 
-  <!-- ============================== RESULTS ============================== -->
-  <section class="section" id="results">
-    <div class="container">
-      <div class="section-head section-head--row" data-reveal>
-        <div class="section-head__txt">
-          <p class="eyebrow">Our work</p>
-          <h2>See the difference</h2>
-          <p>Photos from real jobs. Drag the handle to compare before and after.</p>
-        </div>
-        <a class="link-arrow" href="/gallery">See the full gallery <Icon name="arrow" /></a>
-      </div>
-
-      <div class="results">
-        <div data-reveal>
-          <BeforeAfter
-            before={hallwayBefore}
-            after={hallwayAfter}
-            beforeAlt="Hallway carpet before cleaning: dull, dark and shadowed with ground-in traffic wear"
-            afterAlt="The same hallway carpet after professional cleaning: bright, with a clean diamond pattern in the pile"
-            caption="Hallway carpet"
-            detail="Traffic wear gone"
-            ratio="1 / 1"
-          />
-        </div>
-        <div data-reveal style="--d:.1s">
-          <BeforeAfter
-            before={spotsBefore}
-            after={spotsAfter}
-            beforeAlt="Light carpet before cleaning, covered in dark spots and stains"
-            afterAlt="The same light carpet after cleaning, even in color with the spots gone"
-            caption="Spots and stains"
-            detail="Light carpet"
-            ratio="1 / 1"
-          />
-        </div>
-        <div data-reveal style="--d:.2s">
-          <StaticPair
-            before={officeBefore}
-            after={officeAfter}
-            beforeAlt="Office carpet before cleaning with large dark stains"
-            afterAlt="Office carpet after cleaning, clean and uniform"
-            caption="Office carpet"
-            detail="Large stains lifted"
-            ratio="1 / 1"
-          />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================== RESOURCES ============================== -->
-  <section class="section section--aqua" id="resources">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Resources</p>
-        <h2>Know what you’re dealing with</h2>
-        <p>A closer look at what builds up in your home, and why a professional deep clean reaches what everyday cleaning can’t.</p>
-      </div>
-
-      <div class="res">
-        {
-          RESOURCES.map((r, i) => (
-            <article class:list={['res__card', i === 0 && 'res__card--feature']} data-reveal style={`--d:${i * 0.08}s`}>
-              <div class="res__img"><Image src={r.image} alt={r.alt} widths={[480, 800]} sizes={i === 0 ? '(min-width: 980px) 600px, 92vw' : '(min-width: 980px) 380px, 92vw'} loading="lazy" /></div>
-              <div class="res__body">
-                <span class="res__n">Resource {r.n}</span>
-                <h3>{r.title}</h3>
-                <p>{r.body}</p>
-              </div>
-            </article>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
   <!-- ============================== REVIEWS ============================== -->
   <section class="section" id="reviews">
-    <div class="container reviews">
-      <div class="reviews__sum" data-reveal>
-        <p class="eyebrow">Reviews</p>
-        <h2>Hear from our happy customers</h2>
+    <div class="container">
+      <div class="reviews__head" data-reveal>
+        <div class="reviews__title">
+          <p class="eyebrow">Reviews</p>
+          <h2>Hear from our happy customers</h2>
+        </div>
         <div class="reviews__score">
           <span class="reviews__big">5.0</span>
           <div>
@@ -235,12 +156,32 @@ const steps = [
             <p>5.0 stars · 3 reviews</p>
           </div>
         </div>
-        <a class="btn btn--outline" href="/contact">Join them, get a free quote <Icon name="arrow" class="i-arrow" /></a>
       </div>
 
-      <ul class="reviews__list">
-        {REVIEWS.map((r, i) => <ReviewCard review={r} delay={i * 0.1} />)}
-      </ul>
+      <div class="reviews__scroll" tabindex="0" role="region" aria-label="Customer reviews">
+        <ul class="reviews__list">
+          {REVIEWS.map((r, i) => <ReviewCard review={r} delay={i * 0.1} />)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== EXPLORE (links to dedicated pages) ============================== -->
+  <section class="explore" aria-label="Explore more">
+    <div class="container explore__grid">
+      {
+        explore.map((e, i) => (
+          <a class="tile" href={e.href} data-reveal style={`--d:${i * 0.08}s`}>
+            <span class="tile__icon"><Icon name={e.icon} /></span>
+            <span class="tile__txt">
+              <small>{e.kicker}</small>
+              <strong>{e.title}</strong>
+              <span>{e.text}</span>
+            </span>
+            <Icon name="arrow" class="tile__go" />
+          </a>
+        ))
+      }
     </div>
   </section>
 
@@ -361,20 +302,11 @@ const steps = [
   /* ---------------- why / how ---------------- */
   .why { background: linear-gradient(180deg, var(--navy-950), var(--navy-900)); }
   .why__bg { position: absolute; inset: 0 0 auto 0; height: 55%; opacity: .16; transform: scaleY(-1); pointer-events: none; }
-  .why__grid { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
+  .why__grid { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
   .why__copy { display: grid; gap: 1.4rem; justify-items: start; }
-  .why__points { display: grid; gap: 1.4rem; margin-top: 1rem; }
-  .why__points li { display: grid; grid-template-columns: auto 1fr; gap: 1.1rem; align-items: start; }
-  .why__points li > span {
-    width: 3rem; height: 3rem; border-radius: 14px; display: grid; place-items: center;
-    background: rgba(168, 223, 24, .12); color: var(--lime-500); border: 1px solid rgba(168, 223, 24, .3);
-  }
-  .why__points li > span :global(svg) { width: 1.4rem; height: 1.4rem; }
-  .why__points strong { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: -0.015em; }
-  .why__points p { color: rgba(255, 255, 255, .72); font-size: 1rem; margin-top: .2rem; }
 
   .vet-callout {
-    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.1rem; width: 100%; margin-top: .6rem;
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.1rem; width: 100%; margin-top: .4rem;
     padding: 1.1rem 1.3rem; border-radius: var(--r-md); text-decoration: none; color: #fff;
     background: linear-gradient(100deg, rgba(168, 223, 24, .16), rgba(78, 199, 238, .1)); border: 1px solid rgba(168, 223, 24, .45);
     transition: transform .3s var(--ease), border-color .3s, background .3s;
@@ -410,50 +342,53 @@ const steps = [
   .how .btn { justify-self: start; }
   @media (max-width: 920px) { .why__grid { grid-template-columns: 1fr; } }
 
-  /* ---------------- results ---------------- */
-  .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 3vw, 2.4rem); align-items: start; }
-  .results > div { min-width: 0; }
-  @media (max-width: 900px) { .results { grid-template-columns: 1fr; max-width: 30rem; margin-inline: auto; } }
-
-  /* ---------------- resources ---------------- */
-  .res { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
-  .res__card {
-    display: flex; flex-direction: column; background: #fff; border-radius: var(--r-lg); overflow: hidden;
-    border: 1px solid rgba(0, 34, 68, .08); box-shadow: var(--shadow-1); transition: transform .4s var(--ease), box-shadow .4s;
-  }
-  .res__card:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); }
-  .res__card--feature { grid-column: 1 / -1; flex-direction: row; }
-  .res__img { background: #fff; display: grid; place-items: center; padding: 1rem; border-bottom: 1px solid var(--line); }
-  .res__img :global(img) { width: 100%; height: 100%; max-height: 20rem; object-fit: contain; }
-  .res__card--feature .res__img { flex: 1.15; border-bottom: 0; border-right: 1px solid var(--line); padding: 0; }
-  .res__card--feature .res__img :global(img) { max-height: none; object-fit: cover; }
-  .res__body { display: grid; gap: .8rem; padding: 1.8rem; align-content: start; }
-  .res__card--feature .res__body { flex: 1; align-content: center; padding: clamp(1.8rem, 4vw, 3rem); }
-  .res__n { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--lime-700); }
-  .res__body p { color: var(--ink-2); }
-  @media (max-width: 860px) {
-    .res { grid-template-columns: 1fr; }
-    .res__card--feature { flex-direction: column; }
-    .res__card--feature .res__img { border-right: 0; border-bottom: 1px solid var(--line); }
-  }
-
-  /* ---------------- reviews ---------------- */
-  .reviews { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
-  .reviews__sum { display: grid; gap: 1.4rem; position: sticky; top: calc(var(--header-h) + 2rem); }
+  /* ---------------- reviews (one row of three) ---------------- */
+  .reviews__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.5rem 3rem; margin-bottom: clamp(1.8rem, 3.5vw, 2.8rem); }
+  .reviews__title { display: grid; gap: 1rem; }
   .reviews__score { display: flex; align-items: center; gap: 1.2rem; }
-  .reviews__big { font-family: var(--font-display); font-weight: 780; font-size: clamp(4rem, 8vw, 6rem); line-height: .9; letter-spacing: -0.05em;
+  .reviews__big { font-family: var(--font-display); font-weight: 780; font-size: clamp(3.4rem, 6vw, 4.8rem); line-height: .9; letter-spacing: -0.05em;
     background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
-  .reviews__score .stars { color: #e5a800; font-size: 1.5rem; }
-  .reviews__score p { color: var(--muted); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; margin-top: .3rem; }
-  .reviews__sum .btn { justify-self: start; }
-  .reviews__list { display: grid; gap: 1.2rem; }
-  @media (max-width: 920px) { .reviews { grid-template-columns: 1fr; } .reviews__sum { position: static; } }
+  .reviews__score .stars { color: #e5a800; font-size: 1.4rem; }
+  .reviews__score p { color: var(--muted); font-family: var(--font-mono); font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; margin-top: .3rem; }
+  .reviews__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.5rem); }
+  /* Phones/tablets: a swipeable row instead of a tall stack */
+  @media (max-width: 900px) {
+    .reviews__scroll { margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); scrollbar-width: none; padding-bottom: .5rem; }
+    .reviews__scroll::-webkit-scrollbar { display: none; }
+    .reviews__list { display: flex; gap: 1rem; width: max-content; }
+    .reviews__list :global(.review) { flex: 0 0 min(82vw, 26rem); scroll-snap-align: start; }
+  }
+
+  /* ---------------- explore tiles ---------------- */
+  .explore { padding-bottom: clamp(3rem, 5vw, 4.5rem); }
+  .explore__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.5rem); }
+  .tile {
+    position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.1rem; padding: 1.4rem 1.5rem;
+    text-decoration: none; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-lg);
+    transition: transform .35s var(--ease), box-shadow .35s, border-color .35s, background .35s;
+  }
+  .tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); border-color: rgba(78, 199, 238, .6); background: #fff; }
+  .tile__icon { width: 3.2rem; height: 3.2rem; border-radius: 16px; display: grid; place-items: center; background: var(--navy-900); color: var(--lime-500); }
+  .tile__icon :global(svg) { width: 1.5rem; height: 1.5rem; }
+  .tile__txt { display: grid; line-height: 1.3; }
+  .tile__txt small { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--lime-700); }
+  .tile__txt strong { font-family: var(--font-display); font-size: 1.25rem; letter-spacing: -0.02em; margin: .15rem 0 .2rem; }
+  .tile__txt span { color: var(--ink-2); font-size: .95rem; }
+  .tile :global(.tile__go) { width: 1.4rem; height: 1.4rem; color: var(--navy-700); transition: transform .3s var(--ease); }
+  .tile:hover :global(.tile__go) { transform: translateX(5px); }
+  @media (max-width: 960px) { .explore__grid { grid-template-columns: 1fr; } }
 
   /* ---------------- service area ---------------- */
   .area { background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); }
   .area__bg { position: absolute; inset: auto 0 0 0; height: 70%; opacity: .22; pointer-events: none; }
   .area .container { position: relative; }
   .area__tel { color: var(--lime-500); text-underline-offset: 3px; }
+  /* Phones: keep the home cards short; each county page lists its towns */
+  @media (max-width: 700px) {
+    .area :global(.county__towns) { display: none; }
+    .area :global(.county) { padding: 1.2rem 1.3rem; gap: .35rem; }
+    .area :global(.county__links) { margin-top: .6rem; }
+  }
 
   /* ---------------- faq ---------------- */
   .faq-wrap { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }

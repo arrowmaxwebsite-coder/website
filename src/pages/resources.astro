@@ -1,0 +1,140 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { SITE } from '../config';
+import { RESOURCES, FAQS, serviceBySlug } from '../data/content';
+
+const crumbs = [{ label: 'Resources' }];
+// Questions that go with these three topics (allergens, pet urine, upholstery)
+const faqs = FAQS.filter((f) => f.tags?.some((t) => ['pet-urine-treatment', 'upholstery-cleaning', 'carpet-cleaning'].includes(t)) && !f.tags?.includes('all')).slice(0, 4);
+---
+
+<Base
+  title="Resources: What Builds Up in Your Carpet & Furniture | ArrowMax"
+  description="What builds up in your carpet, padding and furniture, and why a professional deep clean reaches what everyday cleaning can't. Free quote."
+  {crumbs}
+>
+  <PageHero
+    {crumbs}
+    eyebrow="Resources"
+    title="Know what you’re"
+    accent="dealing with."
+    lead="A closer look at what builds up in your home, and why a professional deep clean reaches what everyday cleaning can’t."
+  >
+    <div class="phero__cta">
+      <a class="btn btn--primary btn--lg" href="/contact">Get your free quote <Icon name="arrow" class="i-arrow" /></a>
+      <a class="btn btn--ghost btn--lg" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+    </div>
+  </PageHero>
+
+  <div class="jump" aria-label="Jump to a topic">
+    <div class="container jump__inner">
+      {RESOURCES.map((r) => <a href={`#${r.slug}`}><span>{r.n}</span> {r.title}</a>)}
+    </div>
+  </div>
+
+  {
+    RESOURCES.map((r, i) => {
+      const svc = serviceBySlug(r.service);
+      return (
+        <section class:list={['row', i % 2 === 1 && 'row--flip', i % 2 === 1 ? 'section--paper' : '']} id={r.slug}>
+          <div class="container row__grid">
+            <div class="row__media" data-reveal>
+              <div class="row__frame">
+                <Image src={r.image} alt={r.alt} widths={[480, 760, 1000]} sizes="(min-width: 900px) 560px, 92vw" loading={i === 0 ? 'eager' : 'lazy'} />
+              </div>
+            </div>
+            <div class="row__copy" data-reveal style="--d:.1s">
+              <p class="eyebrow">Resource {r.n}</p>
+              <h2>{r.title}</h2>
+              <p class="lead">{r.body}</p>
+
+              <div class="action">
+                <span class="action__label">What ArrowMax does about it</span>
+                <p>{r.action}</p>
+                <div class="action__links">
+                  <a class="btn btn--primary" href={`/services/${r.service}`}>{svc?.title ?? r.cta} <Icon name="arrow" class="i-arrow" /></a>
+                  <a class="link-arrow" href={`/contact?service=${r.service}`}>Get a quote</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    })
+  }
+
+  {
+    faqs.length > 0 && (
+      <section class="section section--aqua">
+        <div class="container faq-wrap">
+          <div class="faq-wrap__head" data-reveal>
+            <p class="eyebrow">Common questions</p>
+            <h2>Straight answers</h2>
+            <p class="lead">The questions that come up most about these topics. More questions? Call or send a message.</p>
+            <a class="link-arrow" href="/about/faqs">See all FAQs <Icon name="arrow" /></a>
+          </div>
+          <div data-reveal style="--d:.1s"><FaqList items={faqs} /></div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand />
+</Base>
+
+<style is:global>
+  /* leave room for the sticky header AND the sticky topic bar when following #anchors */
+  html { scroll-padding-top: calc(var(--header-h) + 78px); }
+</style>
+
+<style>
+  .phero__cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .6rem; }
+
+  .jump { position: sticky; top: var(--header-h); z-index: 50; background: rgba(255, 255, 255, .92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); margin-top: -1px; }
+  .jump__inner { display: flex; gap: .5rem; overflow-x: auto; padding-block: .8rem; scrollbar-width: none; }
+  .jump__inner::-webkit-scrollbar { display: none; }
+  .jump a {
+    display: inline-flex; align-items: center; gap: .55rem; flex: none; padding: .5rem .95rem; border-radius: 999px; text-decoration: none;
+    font-weight: 600; font-size: .92rem; color: var(--navy-900); border: 1px solid var(--line); background: #fff; transition: all .2s;
+  }
+  .jump a span { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .1em; color: var(--lime-700); transition: color .2s; }
+  .jump a:hover { background: var(--navy-900); color: #fff; border-color: var(--navy-900); }
+  .jump a:hover span { color: var(--lime-500); }
+
+  .row { padding-block: clamp(3.5rem, 6.5vw, 6rem); }
+  .row__grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .row--flip .row__media { order: 2; }
+  .row__grid > * { min-width: 0; }
+  .row__media { position: relative; }
+  .row__frame { background: #fff; border-radius: var(--r-lg); overflow: hidden; border: 1px solid rgba(0, 34, 68, .1); box-shadow: var(--shadow-2); display: grid; place-items: center; }
+  .row__frame :global(img) { width: 100%; height: auto; max-height: 34rem; object-fit: contain; }
+  .row__media::before {
+    content: ''; position: absolute; z-index: -1; inset: 16px -16px -16px 16px; border-radius: 34px;
+    background: linear-gradient(140deg, var(--lime-500), var(--aqua-500)); opacity: .85;
+  }
+  .row--flip .row__media::before { inset: 16px 16px -16px -16px; }
+  .row__copy { display: grid; gap: 1.2rem; justify-items: start; }
+
+  .action { display: grid; gap: .7rem; width: 100%; padding: 1.4rem 1.5rem; border-radius: var(--r-md); background: var(--navy-900); color: #fff; box-shadow: var(--shadow-1); }
+  .row--flip .action { background: var(--navy-900); }
+  .action__label { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--lime-500); }
+  .action p { color: rgba(255, 255, 255, .88); }
+  .action__links { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.4rem; margin-top: .3rem; }
+  .action .link-arrow { color: #fff; }
+  .action .btn { white-space: normal; text-align: center; }
+
+  @media (max-width: 900px) {
+    .row__grid { grid-template-columns: minmax(0, 1fr); }
+    .row--flip .row__media { order: 0; }
+    .row__media::before, .row--flip .row__media::before { inset: 12px -10px -12px 10px; }
+  }
+
+  .faq-wrap { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .faq-wrap__head { display: grid; gap: 1.2rem; justify-items: start; position: sticky; top: calc(var(--header-h) + 5rem); }
+  @media (max-width: 920px) { .faq-wrap { grid-template-columns: 1fr; } .faq-wrap__head { position: static; } }
+</style>
