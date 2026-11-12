@@ -1,0 +1,16 @@
+{
+  // Only used to type-check the Worker (npm run typecheck:worker). Wrangler bundles the code itself.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "WebWorker"],
+    "types": [],
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "skipLibCheck": true
+  },
+  "include": ["*.ts"],
+  "exclude": ["*.test.ts"]
+}

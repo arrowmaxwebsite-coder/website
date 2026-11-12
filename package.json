@@ -10,6 +10,8 @@
     "preview": "astro preview",
     "prep:images": "node scripts/prep-images.mjs",
     "prep:brand": "node scripts/make-brand-assets.mjs",
+    "test": "node --test worker/chat.test.ts",
+    "typecheck:worker": "npx --yes -p typescript@5 tsc -p worker",
     "deploy": "npm run build && wrangler deploy",
     "cf:preview": "npm run build && wrangler dev"
   },

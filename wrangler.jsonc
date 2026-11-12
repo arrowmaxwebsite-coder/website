@@ -1,4 +1,5 @@
-// Cloudflare Workers configuration: serves the static Astro build in ./dist as a Worker with static assets.
+// Cloudflare Workers configuration: serves the static Astro build in ./dist and runs the chat API
+// (worker/index.ts) for /api/* requests only.
 // Docs: https://developers.cloudflare.com/workers/static-assets/
 {
   "$schema": "node_modules/wrangler/config-schema.json",
@@ -7,6 +8,10 @@
   // If the GitHub build fails with a name-mismatch error, change this to the name it reports.
   "name": "website",
 
+  // Server-side entry point. Having a script is what allows bindings (like Workers AI) on this Worker; a Worker
+  // that only has static assets can't have any. Wrangler bundles this file itself: no extra build step.
+  "main": "worker/index.ts",
+
   // Pins runtime behaviour. Don't bump this without testing; it must not be later than the installed wrangler supports.
   "compatibility_date": "2026-11-10",
 
@@ -14,9 +19,30 @@
     // `npm run build` writes the site here (Astro's default output folder).
     "directory": "./dist",
 
+    // Exposes the static files to worker code as env.ASSETS (used for the 404 page and /chat-knowledge.json).
+    "binding": "ASSETS",
+
+    // Only /api/* starts the Worker. Every other request is answered straight from the static assets,
+    // exactly as before, without running any code. (Don't set this to `true`: that would run the Worker on every page view.)
+    "run_worker_first": ["/api/*"],
+
     // Unknown URLs get the site's own branded dist/404.html, with a real 404 status.
     "not_found_handling": "404-page"
-  }
+  },
+
+  // Cloudflare Workers AI, used by POST /api/chat via env.AI.run(). No external AI account or API key.
+  // Free tier: 10,000 Neurons/day. Note: this binding always talks to the real Cloudflare service, even in `wrangler dev`.
+  "ai": { "binding": "AI" },
+
+  // Per-visitor rate limit for the chat endpoint (env.CHAT_LIMITER). Limits are counted per visitor IP, per
+  // Cloudflare location, and are approximate. namespace_id just has to be a number unique among this account's limiters.
+  "ratelimits": [
+    {
+      "name": "CHAT_LIMITER",
+      "namespace_id": "724702",
+      "simple": { "limit": 10, "period": 60 }
+    }
+  ]
 
   // NOTE: no "routes" / custom domain on purpose. Attaching www.arrowmaxcleanwpa.com here would point the live
   // domain at this Worker on the first deploy. Add the custom domain in the dashboard (Settings → Domains & Routes)

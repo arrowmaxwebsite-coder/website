@@ -6,6 +6,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
+import ChatWidget from '../components/ChatWidget.astro';
 import { SITE, COUNTIES } from '../config';
 
 interface Props {
@@ -101,6 +102,7 @@ const schema = {
     </main>
     <Footer />
     <MobileBar />
+    <ChatWidget />
 
     <script>
       // Scroll-reveal: fades sections in as they enter the viewport.
