@@ -19,7 +19,7 @@ const groups: Group[] = [
     label: 'Services',
     href: '/services',
     children: [
-      { href: '/services', label: 'All services', icon: 'sparkles', desc: 'Six services, one straight price' },
+      { href: '/services', label: 'All services', icon: 'sparkles', desc: 'Straightforward estimates for every service' },
       ...SERVICES.map((s) => ({ href: `/services/${s.slug}`, label: s.title, icon: s.icon })),
     ],
   },
@@ -182,7 +182,7 @@ const isActive = (g: Group) =>
   .submenu__link:hover .submenu__icon { background: var(--lime-500); color: var(--navy-950); }
   .submenu__txt { display: grid; line-height: 1.25; }
   .submenu__txt strong { font-weight: 600; font-size: .96rem; }
-  .submenu__txt small { color: rgba(255, 255, 255, .6); font-size: .8rem; margin-top: .1rem; }
+  .submenu__txt small { color: rgba(255, 255, 255, .6); font-size: .8rem; margin-top: .1rem; text-wrap: balance; }
 
   .header-actions { display: flex; align-items: center; gap: 1rem; }
   .header-phone { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: #fff; white-space: nowrap; }
