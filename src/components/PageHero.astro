@@ -1,0 +1,56 @@
+---
+import Swoosh from './Swoosh.astro';
+
+interface Crumb { label: string; href?: string }
+interface Props {
+  eyebrow: string;
+  title: string;
+  accent?: string;
+  lead?: string;
+  /** single current-page label (shorthand for crumbs=[{label}]) */
+  crumb?: string;
+  /** full trail after "Home"; the last item is the current page */
+  crumbs?: Crumb[];
+}
+const { eyebrow, title, accent, lead, crumb, crumbs } = Astro.props;
+const trail: Crumb[] = crumbs ?? [{ label: crumb ?? title }];
+---
+
+<section class="phero on-dark">
+  <div class="phero__bg" aria-hidden="true"><Swoosh id="ph" /></div>
+  <div class="container phero__inner">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      {
+        trail.map((c, i) => (
+          <>
+            <span aria-hidden="true">/</span>
+            {c.href && i < trail.length - 1 ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}
+          </>
+        ))
+      }
+    </nav>
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title} {accent && <span class="grad-text">{accent}</span>}</h1>
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .phero {
+    position: relative; overflow: hidden; color: #fff;
+    background:
+      radial-gradient(900px 420px at 92% -10%, rgba(78, 199, 238, .28), transparent 60%),
+      radial-gradient(700px 400px at 0% 110%, rgba(168, 223, 24, .16), transparent 60%),
+      var(--navy-900);
+    padding-block: clamp(3rem, 6vw, 5.5rem) clamp(4.5rem, 9vw, 8rem);
+  }
+  .phero__bg { position: absolute; inset: auto 0 0 0; height: 70%; opacity: .55; pointer-events: none; }
+  .phero__inner { position: relative; display: grid; gap: 1.1rem; justify-items: start; }
+  .phero h1 { font-size: clamp(2.4rem, 1.2rem + 4.4vw, 4.4rem); max-width: 18ch; }
+  .phero h1 .grad-text { display: block; width: fit-content; }
+  .crumbs { display: flex; flex-wrap: wrap; gap: .6rem; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(255, 255, 255, .6); margin-bottom: .6rem; }
+  .crumbs a { text-decoration: none; color: var(--aqua-300); }
+  .crumbs a:hover { color: #fff; }
+</style>

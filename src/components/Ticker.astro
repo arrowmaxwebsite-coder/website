@@ -1,0 +1,39 @@
+---
+const items = ['Carpet cleaning', 'Tile & grout', 'Hardwood floors', 'Upholstery', 'Pet urine treatment', 'Rug cleaning', 'Westmoreland', 'Indiana', 'Cambria County'];
+---
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    {
+      [0, 1].map(() => (
+        <ul class="ticker__set">
+          {items.map((t) => (
+            <li>
+              <svg viewBox="0 0 24 12" width="22" height="11"><path d="M0 6h19M14 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              {t}
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .ticker {
+    overflow: hidden; background: var(--grad); color: var(--navy-950); padding-block: .95rem;
+    border-block: 1px solid rgba(0, 23, 48, .12);
+  }
+  .ticker__track { display: flex; width: max-content; animation: marquee 42s linear infinite; }
+  .ticker:hover .ticker__track { animation-play-state: paused; }
+  .ticker__set { display: flex; flex: none; }
+  .ticker__set li {
+    display: inline-flex; align-items: center; gap: 1rem; padding-right: 2.2rem; white-space: nowrap;
+    font-family: var(--font-mono); font-weight: 600; font-size: .82rem; letter-spacing: .15em; text-transform: uppercase;
+  }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker__track { animation: none; width: auto; flex-wrap: wrap; }
+    .ticker__set + .ticker__set { display: none; }
+  }
+</style>

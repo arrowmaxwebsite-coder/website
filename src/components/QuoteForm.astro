@@ -1,0 +1,272 @@
+---
+import Icon from './Icon.astro';
+import { SITE, COUNTIES } from '../config';
+import { SERVICES } from '../data/content';
+
+interface Props {
+  /** "bar" = compact glass strip for dark hero · "full" = complete form for the contact page */
+  variant?: 'bar' | 'full';
+  id?: string;
+  /** pre-select a service by slug (e.g. on a service page) */
+  service?: string;
+  /** pre-select a county by short slug (e.g. "cambria") on a county page */
+  county?: string;
+}
+const { variant = 'bar', id = 'quote', service, county } = Astro.props;
+---
+
+<form
+  class:list={['qf', `qf--${variant}`]}
+  id={id}
+  method="post"
+  action={SITE.formEndpoint || undefined}
+  data-quote-form
+  data-endpoint={SITE.formEndpoint}
+  data-email={SITE.email}
+  data-phone={SITE.phone}
+  novalidate
+>
+  <input type="hidden" name="_subject" value="New quote request from the ArrowMax website" />
+  <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+  <div class="qf__body" data-body>
+    {
+      variant === 'bar' ? (
+        <>
+          <div class="qf__intro">
+            <strong>Get your free quote</strong>
+            <span>No pressure, just a straight answer on price.</span>
+          </div>
+          <div class="qf__fields">
+            <div class="field">
+              <label for={`${id}-name`}>Your name</label>
+              <input id={`${id}-name`} name="name" type="text" autocomplete="name" placeholder="Jane Smith" required />
+            </div>
+            <div class="field">
+              <label for={`${id}-phone`}>Phone</label>
+              <input id={`${id}-phone`} name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(724) 555-0123" required />
+            </div>
+            <div class="field">
+              <label for={`${id}-service`}>What needs cleaning?</label>
+              <select id={`${id}-service`} name="service" required>
+                <option value="" disabled selected={!service}>Choose a service</option>
+                {SERVICES.map((s) => <option value={s.value} data-slug={s.slug} selected={s.slug === service}>{s.title}</option>)}
+                <option value="Not sure yet">Not sure yet</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for={`${id}-county`}>County</label>
+              <select id={`${id}-county`} name="county" required>
+                <option value="" disabled selected={!county}>Choose county</option>
+                {/* short names here so the selected value never crowds the dropdown arrow in the compact banner */}
+                {COUNTIES.map((c) => <option value={c.name} data-slug={c.slug} selected={c.slug === county}>{c.short}</option>)}
+                <option value="Somewhere nearby">Somewhere nearby</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn--primary qf__submit" type="submit">
+            <span data-label>Get my quote</span> <Icon name="arrow" class="i-arrow" />
+          </button>
+        </>
+      ) : (
+        <>
+          <div class="qf__grid">
+            <div class="field">
+              <label for={`${id}-name`}>Your name *</label>
+              <input id={`${id}-name`} name="name" type="text" autocomplete="name" placeholder="Jane Smith" required />
+            </div>
+            <div class="field">
+              <label for={`${id}-phone`}>Phone *</label>
+              <input id={`${id}-phone`} name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(724) 555-0123" required />
+            </div>
+            <div class="field field--wide">
+              <label for={`${id}-email`}>Email</label>
+              <input id={`${id}-email`} name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+            </div>
+            <div class="field">
+              <label for={`${id}-county`}>County *</label>
+              <select id={`${id}-county`} name="county" required>
+                <option value="" disabled selected={!county}>Choose county</option>
+                {COUNTIES.map((c) => <option value={c.name} data-slug={c.slug} selected={c.slug === county}>{c.name}</option>)}
+                <option value="Somewhere nearby">Somewhere nearby</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for={`${id}-town`}>Town</label>
+              <input id={`${id}-town`} name="town" type="text" autocomplete="address-level2" placeholder="Greensburg" />
+            </div>
+          </div>
+
+          <fieldset class="qf__services">
+            <legend>What needs cleaning? <span>(pick all that apply)</span></legend>
+            <div class="qf__chips">
+              {SERVICES.map((s) => (
+                <label class="check">
+                  <input type="checkbox" name="services" value={s.value} data-slug={s.slug} checked={s.slug === service} />
+                  <span><Icon name={s.icon} /> {s.title}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for={`${id}-message`}>Tell us about your floors</label>
+            <textarea id={`${id}-message`} name="message" rows="4" placeholder="How many rooms? Any stains, pets or problem spots we should know about?"></textarea>
+          </div>
+
+          <button class="btn btn--primary btn--lg qf__submit" type="submit">
+            <span data-label>Request my free quote</span> <Icon name="arrow" class="i-arrow" />
+          </button>
+          <p class="qf__fine">No pressure, just a straight answer on price. By sending this you agree to be contacted about your quote. See our <a href="/privacy-policy">privacy policy</a>.</p>
+        </>
+      )
+    }
+  </div>
+
+  <div class="qf__status" data-status role="status" aria-live="polite" hidden></div>
+</form>
+
+<style>
+  /* shared */
+  .qf { position: relative; }
+  .qf__status { display: grid; gap: .8rem; justify-items: start; padding: 1.4rem; }
+  .qf__status[hidden] { display: none; }
+  .qf__status strong { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: -0.02em; }
+  .qf__status p { max-width: 52ch; }
+  .qf__status .qf__ok {
+    width: 3rem; height: 3rem; border-radius: 50%; display: grid; place-items: center;
+    background: linear-gradient(100deg, var(--lime-500), var(--lime-300)); color: var(--navy-950);
+  }
+  .qf__status .qf__ok :global(svg) { width: 1.5rem; height: 1.5rem; stroke-width: 2.6; }
+  .qf__status .qf__err { color: #ffb4a8; }
+  .qf.is-busy .qf__submit { opacity: .7; pointer-events: none; }
+  .qf__submit { white-space: normal; }
+
+  /* ---- bar (dark hero) ---- */
+  .qf--bar {
+    background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .18); border-radius: 26px;
+    -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); color: #fff;
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .6);
+  }
+  /* Mobile-first: everything stacks. At ≥1101px the banner becomes two roomy rows:
+     title + tagline on top, then the four fields with the button aligned to the bottom of the inputs. */
+  .qf--bar .qf__body { display: grid; grid-template-columns: 1fr; gap: 1.3rem; padding: 1.5rem; }
+  .qf--bar .qf__intro { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem 1rem; line-height: 1.25; }
+  .qf--bar .qf__intro strong { font-family: var(--font-display); font-size: 1.45rem; letter-spacing: -0.02em; }
+  .qf--bar .qf__intro span { color: rgba(255, 255, 255, .75); font-size: .95rem; }
+  .qf--bar .qf__fields { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  .qf--bar .field { gap: .5rem; }
+  .qf--bar .field > label { color: var(--aqua-300); }
+  .qf--bar .field input, .qf--bar .field select { padding: .95rem 1.1rem; }
+  /* keep the dropdown text well clear of the arrow (this rule must out-rank the shorthand padding above) */
+  .qf--bar .field select { padding-right: 3rem; background-position: right 1.1rem center; }
+  .qf--bar .qf__submit { justify-self: stretch; }
+  .qf--bar .qf__status { color: #fff; }
+
+  @media (min-width: 601px) { .qf--bar .qf__fields { grid-template-columns: 1fr 1fr; } }
+  /* One-row layout only when there is genuinely room: phone placeholder and the longest service name
+     ("Hardwood Floor Cleaning") must fit without clipping. Below 1261px the roomier 2×2 layout is used. */
+  @media (min-width: 1261px) {
+    .qf--bar .qf__body { grid-template-columns: 1fr auto; grid-template-areas: 'intro intro' 'fields submit'; align-items: end; gap: 1.4rem 1.75rem; padding: 1.9rem 2.1rem 2rem; }
+    .qf--bar .qf__intro { grid-area: intro; }
+    .qf--bar .qf__fields { grid-area: fields; grid-template-columns: 1fr 1fr 1.65fr 1.35fr; gap: 1rem; }
+    .qf--bar .qf__submit { min-height: 60px; } /* same height as the inputs so the row lines up */
+    .qf--bar .qf__submit { grid-area: submit; justify-self: auto; }
+  }
+
+  /* ---- full (contact page) ---- */
+  .qf--full .qf__body { display: grid; gap: 1.4rem; }
+  .qf__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  .qf__grid .field--wide { grid-column: 1 / -1; }
+  .qf__services { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .qf__services legend { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: .7rem; padding: 0; }
+  .qf__services legend span { text-transform: none; letter-spacing: 0; opacity: .8; }
+  .qf__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .check { position: relative; cursor: pointer; }
+  .check input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .check span {
+    display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1rem; border-radius: 999px; font-weight: 560; font-size: .95rem;
+    border: 1.5px solid rgba(10, 27, 46, .18); background: #fff; color: var(--ink-2); transition: all .2s;
+  }
+  .check span :global(svg) { width: 1.1em; height: 1.1em; color: var(--lime-600); }
+  .check:hover span { border-color: var(--navy-700); }
+  .check input:checked + span { background: var(--navy-900); color: #fff; border-color: var(--navy-900); }
+  .check input:checked + span :global(svg) { color: var(--lime-500); }
+  .check input:focus-visible + span { outline: 3px solid var(--aqua-500); outline-offset: 3px; }
+  .qf__fine { font-size: .88rem; color: var(--muted); }
+  .qf__fine a { color: var(--navy-700); }
+  .qf--full .qf__status { color: var(--ink); }
+  .qf--full .qf__status .qf__err { color: #b3261e; }
+  @media (max-width: 560px) { .qf__grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const forms = document.querySelectorAll<HTMLFormElement>('form[data-quote-form]');
+
+  // Pre-select from links like /contact?county=cambria&service=rugs (no personal data ever goes in the URL)
+  const params = new URLSearchParams(location.search);
+  const wantCounty = params.get('county');
+  const wantService = params.get('service');
+
+  forms.forEach((form) => {
+    const body = form.querySelector<HTMLElement>('[data-body]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const label = form.querySelector<HTMLElement>('[data-label]');
+    const email = form.dataset.email || '';
+    const phone = form.dataset.phone || '';
+
+    // Only apply URL prefill when the visitor arrived with ?county= / ?service=
+    if (wantCounty) {
+      const sel = form.querySelector<HTMLSelectElement>('select[name="county"]');
+      const opt = sel?.querySelector<HTMLOptionElement>(`option[data-slug="${CSS.escape(wantCounty)}"]`);
+      if (sel && opt) sel.value = opt.value;
+    }
+    if (wantService) {
+      const box = form.querySelector<HTMLInputElement>(`input[type="checkbox"][data-slug="${CSS.escape(wantService)}"]`);
+      if (box) box.checked = true;
+      const sel = form.querySelector<HTMLSelectElement>('select[name="service"]');
+      const opt = sel?.querySelector<HTMLOptionElement>(`option[data-slug="${CSS.escape(wantService)}"]`);
+      if (sel && opt) sel.value = opt.value;
+    }
+
+    const show = (html: string) => { body.hidden = true; status.hidden = false; status.innerHTML = html; status.focus?.(); };
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      const data = new FormData(form);
+      if (data.get('_gotcha')) return; // honeypot tripped: silently drop bots
+      const endpoint = form.dataset.endpoint || '';
+
+      const name = esc(String(data.get('name') || '').split(' ')[0] || 'there');
+      const check = '<span class="qf__ok"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>';
+
+      form.classList.add('is-busy');
+      if (label) label.textContent = 'Sending…';
+
+      try {
+        if (endpoint) {
+          const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+          if (!res.ok) throw new Error(String(res.status));
+          show(`${check}<strong>Thanks, ${name}! Request received.</strong><p>We'll get back to you with a straight answer on price. Need it sooner? Call <a href="tel:${phone.replace(/\D/g, '')}">${esc(phone)}</a>.</p>`);
+        } else {
+          // No hosted form endpoint configured yet: open the visitor's email app with everything pre-filled.
+          const lines = [...data.entries()]
+            .filter(([k, v]) => !k.startsWith('_') && String(v).trim())
+            .map(([k, v]) => `${k[0].toUpperCase() + k.slice(1)}: ${v}`);
+          const subject = 'Free quote request';
+          location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+          show(`${check}<strong>Almost done, ${name}!</strong><p>Your email app should have opened with your request ready to send. If it didn't, email <a href="mailto:${email}">${esc(email)}</a> or call <a href="tel:${phone.replace(/\D/g, '')}">${esc(phone)}</a>.</p>`);
+        }
+      } catch {
+        form.classList.remove('is-busy');
+        if (label) label.textContent = 'Try again';
+        status.hidden = false;
+        status.innerHTML = `<p class="qf__err"><strong>Sorry, that didn't go through.</strong> Please call <a href="tel:${phone.replace(/\D/g, '')}">${esc(phone)}</a> or email <a href="mailto:${email}">${esc(email)}</a>.</p>`;
+        return;
+      }
+      form.classList.remove('is-busy');
+    });
+  });
+</script>

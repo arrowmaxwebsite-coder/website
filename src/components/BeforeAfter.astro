@@ -1,0 +1,122 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  before: ImageMetadata;
+  after: ImageMetadata;
+  beforeAlt: string;
+  afterAlt: string;
+  caption?: string;
+  detail?: string;
+  /** CSS aspect-ratio, e.g. "4 / 5" */
+  ratio?: string;
+  start?: number;
+  eager?: boolean;
+  hint?: boolean;
+}
+const { before, after, beforeAlt, afterAlt, caption, detail, ratio = '4 / 5', start = 50, eager = false, hint = true } = Astro.props;
+const loading = eager ? 'eager' : 'lazy';
+---
+
+<figure class="ba" style={`--pos:${start}%`} data-ba data-start={start}>
+  <div class="ba__frame" style={`aspect-ratio:${ratio}`}>
+    <Image class="ba__img" src={before} alt={beforeAlt} loading={loading} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
+    <Image class="ba__img ba__img--after" src={after} alt={afterAlt} loading={loading} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
+    <span class="ba__tag ba__tag--before" aria-hidden="true">Before</span>
+    <span class="ba__tag ba__tag--after" aria-hidden="true">After</span>
+    <span class="ba__line" aria-hidden="true"></span>
+    <span class="ba__knob" aria-hidden="true"><Icon name="drag" /></span>
+    {hint && <span class="ba__hint" aria-hidden="true">Drag to compare</span>}
+    <input class="ba__range" type="range" min="0" max="100" step="0.1" value={start} aria-label={`Compare before and after${caption ? `: ${caption}` : ''}. Use arrow keys or drag.`} />
+  </div>
+  {
+    caption && (
+      <figcaption class="ba__cap">
+        <strong>{caption}</strong>
+        {detail && <span>{detail}</span>}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style is:global>
+  .ba { position: relative; }
+  .ba__frame {
+    position: relative; overflow: hidden; border-radius: var(--r-lg); background: var(--navy-900);
+    box-shadow: var(--shadow-2); isolation: isolate; user-select: none; -webkit-user-select: none;
+  }
+  .ba__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  .ba__img--after { clip-path: inset(0 0 0 var(--pos)); }
+
+  .ba__line {
+    position: absolute; z-index: 2; top: 0; bottom: 0; left: var(--pos); width: 3px; margin-left: -1.5px;
+    background: #fff; box-shadow: 0 0 0 1px rgba(0, 23, 48, .15), 0 0 24px rgba(0, 23, 48, .45); pointer-events: none;
+  }
+  .ba__knob {
+    position: absolute; z-index: 3; top: 50%; left: var(--pos); width: 3.2rem; height: 3.2rem; margin: -1.6rem 0 0 -1.6rem;
+    display: grid; place-items: center; border-radius: 50%; background: #fff; color: var(--navy-900);
+    box-shadow: 0 8px 24px rgba(0, 23, 48, .45), 0 0 0 5px rgba(255, 255, 255, .28); pointer-events: none;
+    transition: transform .25s var(--ease);
+  }
+  .ba__knob svg { width: 1.5rem; height: 1.5rem; stroke-width: 2.4; }
+  .ba__frame:hover .ba__knob { transform: scale(1.08); }
+  .ba__range:focus-visible ~ .ba__knob { outline: 3px solid var(--aqua-500); outline-offset: 4px; }
+
+  .ba__hint {
+    position: absolute; z-index: 3; top: calc(50% + 2.2rem); left: var(--pos); transform: translateX(-50%);
+    padding: .3rem .7rem; border-radius: 999px; background: rgba(0, 23, 48, .78); color: #fff; white-space: nowrap;
+    font-family: var(--font-mono); font-size: .66rem; letter-spacing: .12em; text-transform: uppercase;
+    pointer-events: none; transition: opacity .4s; animation: hintBob 2.4s ease-in-out infinite;
+  }
+  .ba.is-touched .ba__hint { opacity: 0; animation: none; }
+  @keyframes hintBob { 50% { transform: translate(-50%, 4px); } }
+
+  .ba__range {
+    position: absolute; inset: 0; z-index: 4; width: 100%; height: 100%; margin: 0; opacity: 0;
+    cursor: ew-resize; touch-action: pan-y; -webkit-appearance: none; appearance: none;
+  }
+
+  .ba__cap { display: grid; gap: .15rem; margin-top: 1rem; padding-inline: .25rem; }
+  .ba__cap strong { font-family: var(--font-display); font-weight: 650; font-size: 1.15rem; letter-spacing: -0.015em; }
+  .ba__cap span { color: var(--muted); font-size: .95rem; }
+  .on-dark .ba__cap span { color: rgba(255, 255, 255, .7); }
+</style>
+
+<script>
+  const sliders = document.querySelectorAll<HTMLElement>('[data-ba]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  sliders.forEach((fig) => {
+    const range = fig.querySelector<HTMLInputElement>('.ba__range');
+    if (!range) return;
+    const start = Number(fig.dataset.start ?? 50);
+    let raf = 0;
+    const set = (v: number) => fig.style.setProperty('--pos', `${v}%`);
+    const touched = () => { cancelAnimationFrame(raf); fig.classList.add('is-touched'); };
+
+    range.addEventListener('input', () => { touched(); set(Number(range.value)); });
+    range.addEventListener('pointerdown', touched);
+    range.addEventListener('keydown', touched);
+
+    // One-time "wipe" demo the first time the slider scrolls into view, so people know it's interactive.
+    if (reduce || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver((entries) => {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      const t0 = performance.now(), dur = 2200;
+      const tick = (now: number) => {
+        const t = Math.min((now - t0) / dur, 1);
+        // start → start-22 → start+22 → start (smooth)
+        const v = start + Math.sin(t * Math.PI * 2) * -22 * (1 - t * 0.15);
+        set(v);
+        range.value = String(v);
+        if (t < 1 && !fig.classList.contains('is-touched')) raf = requestAnimationFrame(tick);
+        else if (t >= 1) { set(start); range.value = String(start); }
+      };
+      setTimeout(() => { if (!fig.classList.contains('is-touched')) raf = requestAnimationFrame(tick); }, 500);
+    }, { threshold: 0.6 });
+    io.observe(fig);
+  });
+</script>

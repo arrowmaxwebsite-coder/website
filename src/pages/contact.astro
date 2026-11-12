@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { SITE, COUNTIES } from '../config';
+---
+
+<Base
+  title="Free Carpet & Floor Cleaning Quote | ArrowMax"
+  description="Get a free carpet, tile, hardwood, upholstery or rug cleaning quote. Call (724) 702-4340 or send a request. Serving Western PA."
+  crumbs={[{ label: 'About', href: '/about' }, { label: 'Contact Us' }]}
+>
+  <PageHero
+    crumbs={[{ label: 'About', href: '/about' }, { label: 'Contact Us' }]}
+    eyebrow="Contact us"
+    title="Let’s get your"
+    accent="free quote."
+    lead="Tell us about your floors and we’ll give you a straight answer on price. No pressure, no surprises."
+  />
+
+  <section class="contact">
+    <div class="container contact__grid">
+      <aside class="info" data-reveal>
+        <a class="info__card info__card--call" href={SITE.phoneHref}>
+          <span class="info__icon"><Icon name="phone" /></span>
+          <span><small>Call us</small><strong>{SITE.phone}</strong></span>
+          <Icon name="arrow" class="info__go" />
+        </a>
+        <a class="info__card" href={`mailto:${SITE.email}`}>
+          <span class="info__icon"><Icon name="mail" /></span>
+          <span><small>Email</small><strong>{SITE.email}</strong></span>
+          <Icon name="arrow" class="info__go" />
+        </a>
+        <div class="info__card info__card--static">
+          <span class="info__icon"><Icon name="pin" /></span>
+          <span>
+            <small>Service area</small>
+            <strong>Western Pennsylvania</strong>
+            <em>{COUNTIES.map((c) => c.name).join(' · ')}</em>
+          </span>
+        </div>
+
+        <div class="expect">
+          <h2>What happens next</h2>
+          <ol>
+            <li><span>1</span> You send us a few details about your floors.</li>
+            <li><span>2</span> We get back to you with a straight answer on price.</li>
+            <li><span>3</span> If it’s right for you, we get it scheduled.</li>
+          </ol>
+        </div>
+      </aside>
+
+      <div class="formcard" data-reveal style="--d:.1s">
+        <div class="formcard__head">
+          <p class="eyebrow">Free quote</p>
+          <h2>Tell us about your floors</h2>
+        </div>
+        <QuoteForm variant="full" id="contact-quote" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact { background: var(--paper); padding-bottom: clamp(4rem, 8vw, 7rem); }
+  .contact__grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; margin-top: clamp(-5.5rem, -6vw, -3rem); position: relative; }
+  .info { display: grid; gap: 1rem; align-content: start; padding-top: clamp(2rem, 5vw, 3.5rem); }
+  .info__card {
+    position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.1rem; padding: 1.3rem 1.4rem;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-md); text-decoration: none; box-shadow: var(--shadow-1);
+    transition: transform .3s var(--ease), box-shadow .3s, border-color .3s;
+  }
+  a.info__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); border-color: rgba(78, 199, 238, .6); }
+  .info__card small { display: block; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .info__card strong { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+  .info__card em { display: block; font-style: normal; color: var(--ink-2); font-size: .92rem; margin-top: .2rem; }
+  .info__icon { width: 3rem; height: 3rem; border-radius: 14px; display: grid; place-items: center; background: var(--aqua-100); color: var(--navy-900); }
+  .info__icon :global(svg) { width: 1.4rem; height: 1.4rem; }
+  .info__card--call { background: linear-gradient(120deg, var(--navy-900), var(--navy-800)); border-color: transparent; color: #fff; }
+  .info__card--call small { color: var(--aqua-300); }
+  .info__card--call .info__icon { background: var(--lime-500); color: var(--navy-950); }
+  .info__card :global(.info__go) { width: 1.3rem; height: 1.3rem; color: var(--lime-600); transition: transform .3s var(--ease); }
+  .info__card--call :global(.info__go) { color: var(--lime-500); }
+  a.info__card:hover :global(.info__go) { transform: translateX(5px); }
+
+  .expect { margin-top: 1rem; padding: 1.6rem; border-radius: var(--r-md); border: 1px dashed rgba(0, 34, 68, .25); }
+  .expect h2 { font-size: 1.25rem; letter-spacing: -0.015em; margin-bottom: 1rem; }
+  .expect ol { display: grid; gap: .9rem; }
+  .expect li { display: grid; grid-template-columns: auto 1fr; gap: .9rem; align-items: start; color: var(--ink-2); }
+  .expect li span { width: 1.9rem; height: 1.9rem; border-radius: 50%; display: grid; place-items: center; background: var(--lime-500); color: var(--navy-950); font-weight: 700; font-size: .9rem; }
+
+  .formcard { background: #fff; border-radius: var(--r-lg); padding: clamp(1.5rem, 4vw, 3rem); box-shadow: var(--shadow-2); border: 1px solid var(--line); display: grid; gap: 1.8rem; }
+  .formcard__head { display: grid; gap: .8rem; }
+  .formcard__head h2 { font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2.3rem); }
+
+  @media (max-width: 920px) {
+    .contact__grid { grid-template-columns: 1fr; margin-top: -2.5rem; }
+    .info { order: 2; padding-top: 0; }
+    .formcard { order: 1; }
+  }
+</style>

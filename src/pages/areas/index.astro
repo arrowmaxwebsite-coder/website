@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import Swoosh from '../../components/Swoosh.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import CountyCard from '../../components/CountyCard.astro';
+import FaqList from '../../components/FaqList.astro';
+import { SITE, COUNTIES } from '../../config';
+import { FAQS } from '../../data/content';
+
+const crumbs = [{ label: 'Areas We Serve' }];
+const faqs = FAQS.filter((f) => f.cat === 'areas');
+---
+
+<Base
+  title="Areas We Serve | ArrowMax Floor Cleaning | Western PA"
+  description="ArrowMax cleans carpet, tile, hardwood, upholstery and rugs in Westmoreland, Indiana and Cambria County, PA. Find your county and get a free quote."
+  {crumbs}
+>
+  <PageHero
+    {crumbs}
+    eyebrow="Areas we serve"
+    title="Three counties."
+    accent="One local crew."
+    lead="ArrowMax serves homeowners across Westmoreland County, Indiana County, and Cambria County in western Pennsylvania."
+  >
+    <div class="phero__cta">
+      <a class="btn btn--primary btn--lg" href="/contact">Get your free quote <Icon name="arrow" class="i-arrow" /></a>
+      <a class="btn btn--ghost btn--lg" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="panel on-dark" data-reveal>
+        <div class="panel__bg" aria-hidden="true"><Swoosh id="areas" animate={false} /></div>
+        <div class="panel__head">
+          <p class="eyebrow">Pick your county</p>
+          <h2>Where we work</h2>
+          <p class="lead">Choose your county to see the towns we serve, everything we clean there, and what local customers say.</p>
+        </div>
+        <ul class="county-grid">
+          {COUNTIES.map((c, i) => <CountyCard county={c} index={i} delay={i * 0.1} />)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Find your town</p>
+        <h2>Towns we serve</h2>
+        <p>Not seeing yours? Call <a class="tel" href={SITE.phoneHref}>{SITE.phone}</a> and we’ll let you know whether we can help.</p>
+      </div>
+      <div class="towns">
+        {
+          COUNTIES.map((c, i) => (
+            <div class="towns__col" data-reveal style={`--d:${i * 0.1}s`}>
+              <h3><a href={c.path}>{c.name}</a></h3>
+              <ul>
+                {[...c.towns, ...c.moreTowns].map((t) => <li><Icon name="pin" /> {t}</li>)}
+              </ul>
+              <a class="link-arrow" href={c.path}>Details for {c.short} County <Icon name="arrow" /></a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container faq-wrap">
+      <div class="faq-wrap__head" data-reveal>
+        <p class="eyebrow">Questions</p>
+        <h2>Is ArrowMax in my area?</h2>
+        <p class="lead">Quick answers about where we work. More questions? We’re a call away.</p>
+        <a class="link-arrow" href="/about/faqs">See all FAQs <Icon name="arrow" /></a>
+      </div>
+      <div data-reveal style="--d:.1s"><FaqList items={faqs} /></div>
+    </div>
+  </section>
+
+  <CtaBand title="Ready for floors that look their best?" />
+</Base>
+
+<style>
+  .phero__cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .6rem; }
+
+  .panel {
+    position: relative; overflow: hidden; isolation: isolate; border-radius: var(--r-lg); color: #fff;
+    background: linear-gradient(160deg, var(--navy-900), var(--navy-950)); box-shadow: var(--shadow-2);
+    padding: clamp(1.5rem, 4vw, 3.5rem); display: grid; gap: clamp(1.8rem, 4vw, 3rem);
+  }
+  .panel__bg { position: absolute; z-index: -1; inset: auto 0 0 0; height: 60%; opacity: .2; pointer-events: none; }
+  .panel__head { display: grid; gap: 1rem; max-width: 46rem; }
+
+  .towns { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
+  .towns__col { display: grid; gap: 1rem; align-content: start; padding: clamp(1.4rem, 3vw, 2rem); background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-1); }
+  .towns__col h3 a { text-decoration: none; }
+  .towns__col h3 a:hover { color: var(--navy-700); }
+  .towns__col ul { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem .8rem; }
+  .towns__col li { display: flex; align-items: center; gap: .45rem; color: var(--ink-2); font-size: .98rem; }
+  .towns__col li :global(svg) { flex: none; width: 1rem; height: 1rem; color: var(--lime-600); }
+  .towns__col .link-arrow { justify-self: start; }
+  .tel { color: var(--navy-700); font-weight: 650; text-underline-offset: 3px; }
+  @media (max-width: 900px) { .towns { grid-template-columns: 1fr; } }
+
+  .faq-wrap { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .faq-wrap__head { display: grid; gap: 1.2rem; justify-items: start; position: sticky; top: calc(var(--header-h) + 2rem); }
+  @media (max-width: 920px) { .faq-wrap { grid-template-columns: 1fr; } .faq-wrap__head { position: static; } }
+</style>

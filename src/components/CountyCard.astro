@@ -1,0 +1,38 @@
+---
+import Icon from './Icon.astro';
+import type { County } from '../config';
+
+interface Props { county: County; index: number; delay?: number }
+const { county: c, index, delay = 0 } = Astro.props;
+---
+
+<li class="county" data-reveal style={`--d:${delay}s`}>
+  <span class="county__n">0{index + 1}</span>
+  <h3><a href={c.path} class="county__link">{c.name}</a></h3>
+  <p class="county__state">Pennsylvania · County seat: {c.seat}</p>
+  <ul class="county__towns">{c.towns.map((t) => <li>{t}</li>)}</ul>
+  <div class="county__links">
+    <a class="link-arrow county__main" href={c.path}>Explore {c.short} County <Icon name="arrow" /></a>
+    <a class="county__quote" href={`/contact?county=${c.slug}`}>Get a quote</a>
+  </div>
+</li>
+
+<style>
+  .county {
+    position: relative; display: grid; gap: .5rem; align-content: start; padding: clamp(1.5rem, 3vw, 2.2rem);
+    border-radius: var(--r-lg); background: rgba(255, 255, 255, .06); border: 1px solid var(--line-dark); color: #fff;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform .35s var(--ease), background .35s, border-color .35s;
+  }
+  .county:hover { transform: translateY(-5px); background: rgba(255, 255, 255, .1); border-color: rgba(168, 223, 24, .5); }
+  .county__n { font-family: var(--font-mono); font-size: .74rem; letter-spacing: .16em; color: var(--lime-500); }
+  .county h3 { font-size: 1.75rem; }
+  .county__link { text-decoration: none; }
+  .county__link::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+  .county__state { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--aqua-300); }
+  .county__towns { display: flex; flex-wrap: wrap; gap: .45rem; margin: 1rem 0 1.2rem; }
+  .county__towns li { padding: .3rem .75rem; border-radius: 999px; font-size: .88rem; background: rgba(255, 255, 255, .08); border: 1px solid var(--line-dark); color: rgba(255, 255, 255, .86); }
+  .county__links { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.4rem; }
+  .county__main { color: #fff; }
+  .county__quote { position: relative; z-index: 2; color: var(--lime-500); font-weight: 650; text-underline-offset: 3px; }
+  .county__quote:hover { color: #fff; }
+</style>

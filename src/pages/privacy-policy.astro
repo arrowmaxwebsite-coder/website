@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { SITE } from '../config';
+---
+
+<!--
+  DRAFT: general-purpose privacy policy written for this site's actual data flow (a quote form + phone/email).
+  It has not been reviewed by a lawyer, and it isn't the text from the previous site (that page couldn't be
+  retrieved). Replace with the owner's approved policy before launch.
+-->
+<Base
+  title="Data Privacy Policy | ArrowMax"
+  description="How ArrowMax collects, uses and protects the information you share when requesting a quote."
+>
+  <PageHero crumb="Privacy" eyebrow="Legal" title="Data privacy" accent="policy." />
+
+  <section class="section">
+    <div class="container prose">
+      <p><em>Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</em></p>
+
+      <h2>What we collect</h2>
+      <p>
+        When you request a quote, we collect the details you choose to give us: your name, phone number, email address
+        (optional), county and town, the services you’re interested in, and any notes about your floors. If you call or email us, we
+        receive whatever you share in that conversation.
+      </p>
+
+      <h2>How we use it</h2>
+      <p>We use your information only to respond to your request, give you a price, schedule and carry out the work, and follow up about it. We do not sell your personal information.</p>
+
+      <h2>Who sees it</h2>
+      <p>Quote requests are delivered to ArrowMax by email through a form-handling service. We don’t share your information with anyone else except where required by law.</p>
+
+      <h2>Cookies and analytics</h2>
+      <p>This website does not use advertising cookies. Fonts and images are served from this site rather than from third-party trackers.</p>
+
+      <h2>Your choices</h2>
+      <p>
+        You can ask us to see, correct or delete the information we hold about you at any time by emailing
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or calling <a href={SITE.phoneHref}>{SITE.phone}</a>.
+      </p>
+
+      <h2>Contact</h2>
+      <p>Questions about this policy? Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+    </div>
+  </section>
+</Base>

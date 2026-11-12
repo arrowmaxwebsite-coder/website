@@ -1,0 +1,105 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import FaqList from '../../components/FaqList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { SITE } from '../../config';
+import { FAQS, FAQ_CATEGORIES } from '../../data/content';
+
+const crumbs = [{ label: 'About', href: '/about' }, { label: 'FAQs' }];
+
+const groups = FAQ_CATEGORIES.map((c) => ({ ...c, items: FAQS.filter((f) => f.cat === c.key) })).filter((g) => g.items.length);
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+
+<Base
+  title="FAQs | ArrowMax Floor Cleaning | Western PA"
+  description="Straight answers about ArrowMax pricing, carpet, tile, hardwood, upholstery, pet urine and rug cleaning, service areas, and our veteran-owned company."
+  {crumbs}
+  schema={[faqSchema]}
+>
+  <PageHero
+    {crumbs}
+    eyebrow="FAQs"
+    title="Straight answers,"
+    accent="no jargon."
+    lead="Everything people ask us before they book. Can’t find yours? Call or send a message and we’ll answer it."
+  />
+
+  <div class="jump" aria-label="Jump to a topic">
+    <div class="container jump__inner">
+      {groups.map((g) => <a href={`#${g.key}`}><Icon name={g.icon} /> {g.label}</a>)}
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container faqs">
+      <div class="faqs__main">
+        {
+          groups.map((g, gi) => (
+            <section class="group" id={g.key} data-reveal>
+              <header class="group__head">
+                <span class="group__icon"><Icon name={g.icon} /></span>
+                <div><h2>{g.label}</h2><p>{g.blurb}</p></div>
+              </header>
+              <FaqList items={g.items} openFirst={gi === 0} />
+            </section>
+          ))
+        }
+      </div>
+
+      <aside class="ask on-dark" data-reveal style="--d:.1s">
+        <p class="eyebrow">Still have questions?</p>
+        <h2>Ask us directly</h2>
+        <p>We’re happy to help. Call or send a request, and we’ll give you a straight answer on price.</p>
+        <a class="btn btn--primary" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+        <a class="btn btn--ghost" href="/contact">Send a request <Icon name="arrow" class="i-arrow" /></a>
+        <a class="ask__mail" href={`mailto:${SITE.email}`}><Icon name="mail" /> {SITE.email}</a>
+      </aside>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style is:global>
+  /* the FAQ page has a sticky topic bar under the header */
+  html { scroll-padding-top: calc(var(--header-h) + 78px); }
+</style>
+
+<style>
+  .jump { position: sticky; top: var(--header-h); z-index: 50; background: rgba(255, 255, 255, .92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); margin-top: -1px; }
+  .jump__inner { display: flex; gap: .5rem; overflow-x: auto; padding-block: .8rem; scrollbar-width: none; }
+  .jump__inner::-webkit-scrollbar { display: none; }
+  .jump a {
+    display: inline-flex; align-items: center; gap: .5rem; flex: none; padding: .5rem .95rem; border-radius: 999px; text-decoration: none;
+    font-weight: 600; font-size: .92rem; color: var(--navy-900); border: 1px solid var(--line); background: #fff; transition: all .2s;
+  }
+  .jump a :global(svg) { width: 1.05em; height: 1.05em; color: var(--lime-600); }
+  .jump a:hover { background: var(--navy-900); color: #fff; border-color: var(--navy-900); }
+  .jump a:hover :global(svg) { color: var(--lime-500); }
+
+  .faqs { display: grid; grid-template-columns: 1.5fr .5fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+  .faqs > * { min-width: 0; }
+  .faqs__main { display: grid; gap: clamp(2.5rem, 5vw, 4rem); }
+  .group { display: grid; gap: 1.4rem; }
+  .group__head { display: flex; align-items: center; gap: 1.1rem; }
+  .group__icon { width: 3.2rem; height: 3.2rem; border-radius: 16px; display: grid; place-items: center; flex: none; background: linear-gradient(120deg, var(--lime-500), var(--lime-300)); color: var(--navy-950); }
+  .group__icon :global(svg) { width: 1.5rem; height: 1.5rem; }
+  .group__head h2 { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem); }
+  .group__head p { color: var(--muted); margin-top: .1rem; }
+
+  .ask { position: sticky; top: calc(var(--header-h) + 5.5rem); display: grid; gap: 1rem; padding: clamp(1.5rem, 3vw, 2.2rem); border-radius: var(--r-lg); color: #fff; background: linear-gradient(150deg, var(--navy-900), var(--navy-800)); box-shadow: var(--shadow-2); }
+  .ask h2 { font-size: 1.7rem; }
+  .ask > p:not(.eyebrow) { color: rgba(255, 255, 255, .78); }
+  .ask__mail { display: inline-flex; align-items: center; gap: .6rem; color: #fff; text-decoration: none; font-weight: 560; overflow-wrap: anywhere; }
+  .ask__mail :global(svg) { color: var(--lime-500); flex: none; }
+  .ask__mail:hover { color: var(--lime-500); }
+  @media (max-width: 960px) { .faqs { grid-template-columns: minmax(0, 1fr); } .ask { position: static; } }
+</style>

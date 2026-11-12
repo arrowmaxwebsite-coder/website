@@ -1,0 +1,30 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../config';
+---
+
+<!-- Always-visible call + quote buttons on phones: the two actions a local-service visitor actually wants. -->
+<div class="mobile-bar" role="region" aria-label="Quick actions">
+  <a class="mobile-bar__call" href={SITE.phoneHref}><Icon name="phone" /> Call now</a>
+  <a class="mobile-bar__quote" href="/contact">Free quote <Icon name="arrow" /></a>
+</div>
+
+<style>
+  .mobile-bar { display: none; }
+  @media (max-width: 820px) {
+    .mobile-bar {
+      position: fixed; z-index: 90; left: 0; right: 0; bottom: 0;
+      display: grid; grid-template-columns: 1fr 1.25fr; gap: .6rem;
+      padding: .65rem .8rem calc(.65rem + env(safe-area-inset-bottom));
+      background: rgba(0, 23, 48, .94); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+      border-top: 1px solid var(--line-dark);
+    }
+    .mobile-bar a {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      padding: .9rem 1rem; border-radius: 999px; font-weight: 700; text-decoration: none; font-size: 1rem;
+    }
+    .mobile-bar__call { color: #fff; border: 1.5px solid rgba(255, 255, 255, .3); }
+    .mobile-bar__quote { color: var(--navy-950); background: linear-gradient(100deg, var(--lime-500), var(--lime-300)); }
+    .mobile-bar :global(svg) { width: 1.15em; height: 1.15em; }
+  }
+</style>

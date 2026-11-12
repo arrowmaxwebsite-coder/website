@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { SITE } from '../config';
+---
+
+<!--
+  DRAFT: general-purpose website terms. Not lawyer-reviewed and not the previous site's text (that page couldn't
+  be retrieved). Replace with the owner's approved terms before launch.
+-->
+<Base title="Terms of Use | ArrowMax" description="Terms of use for the ArrowMax website.">
+  <PageHero crumb="Terms" eyebrow="Legal" title="Terms of" accent="use." />
+
+  <section class="section">
+    <div class="container prose">
+      <p><em>Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</em></p>
+
+      <h2>Using this website</h2>
+      <p>This website provides information about ArrowMax’s carpet, tile, hardwood, upholstery, pet urine treatment and rug cleaning services in Westmoreland, Indiana and Cambria County, PA. By using it, you agree to these terms.</p>
+
+      <h2>Quotes and services</h2>
+      <p>Information on this site is general and not a binding offer. Prices are given in a quote specific to your floors, and any work is agreed directly between you and ArrowMax.</p>
+
+      <h2>Photos and content</h2>
+      <p>Photos and text on this site belong to ArrowMax or are used with permission. Please don’t copy or reuse them without asking first.</p>
+
+      <h2>No guarantees about third-party content</h2>
+      <p>We do our best to keep this site accurate and up to date, but we can’t promise it is always complete or error-free.</p>
+
+      <h2>Contact</h2>
+      <p>Questions? Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or call <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
+    </div>
+  </section>
+</Base>

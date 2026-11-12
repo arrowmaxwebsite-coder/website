@@ -1,0 +1,454 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Swoosh from '../components/Swoosh.astro';
+import Ticker from '../components/Ticker.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import StaticPair from '../components/StaticPair.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import CountyCard from '../components/CountyCard.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+import { Image } from 'astro:assets';
+import { SITE, COUNTIES } from '../config';
+import { SERVICES, REVIEWS, RESOURCES } from '../data/content';
+
+import hallwayBefore from '../assets/photos/ba-hallway-before.jpg';
+import hallwayAfter from '../assets/photos/ba-hallway-after.jpg';
+import spotsBefore from '../assets/photos/ba-spots-before.jpg';
+import spotsAfter from '../assets/photos/ba-spots-after.jpg';
+import brownBefore from '../assets/photos/ba-brown-before.jpg';
+import brownAfter from '../assets/photos/ba-brown-after.jpg';
+import officeBefore from '../assets/photos/ba-office-before.jpg';
+import officeAfter from '../assets/photos/ba-office-after.jpg';
+
+const steps = [
+  { t: 'Tell us about your floors', d: 'Send the quick request form or give us a call. Tell us what needs cleaning and where you are.' },
+  { t: 'Get a straight answer on price', d: 'A free quote with no pressure and no surprises. You decide if it’s right for you.' },
+  { t: 'We show up and get it done', d: 'Careful with your home, honest about the results, and your floors left looking better than when we arrived.' },
+];
+---
+
+<Base
+  title="ArrowMax Carpet & Floor Cleaning | Westmoreland, Indiana & Cambria PA"
+  description="Local carpet, tile & grout, hardwood, upholstery, pet urine and rug cleaning in Westmoreland, Indiana & Cambria County, PA. Free quote, no pressure."
+>
+  <!-- ============================== HERO ============================== -->
+  <section class="hero on-dark">
+    <div class="hero__bg" aria-hidden="true"><Swoosh id="hero" /></div>
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <div class="hero__chips">
+          <p class="chip"><span class="chip__dot"></span> Trusted local floor cleaning</p>
+          <a class="chip chip--vet" href="/about/mission-and-values"><Icon name="shield" /> Veteran owned &amp; operated</a>
+        </div>
+        <h1>Carpet &amp; floor cleaning, <span class="grad-text">done right.</span></h1>
+        <p class="lead">
+          ArrowMax serves Westmoreland, Indiana, and Cambria County, PA with professional carpet, tile, and hardwood floor
+          cleaning. Get your free quote today.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="/contact">Get your free quote <Icon name="arrow" class="i-arrow" /></a>
+          <a class="btn btn--ghost btn--lg" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+        </div>
+        <ul class="hero__proof">
+          <li>
+            <span class="stars" aria-hidden="true">{[0, 1, 2, 3, 4].map(() => <Icon name="star" />)}</span>
+            <span><strong>5.0</strong> customer rating</span>
+          </li>
+          <li><Icon name="check" /> No pressure, just a straight answer on price</li>
+          <li><Icon name="pin" /> Westmoreland · Indiana · Cambria</li>
+        </ul>
+      </div>
+
+      <div class="hero__visual">
+        <div class="hero__frame">
+          <BeforeAfter
+            before={hallwayBefore}
+            after={hallwayAfter}
+            beforeAlt="Hallway carpet before cleaning: dull, dark and shadowed with ground-in traffic wear"
+            afterAlt="The same hallway carpet after professional cleaning: bright, with a clean diamond pattern in the pile"
+            caption="Real job · Hallway carpet"
+            eager
+          />
+          <span class="float float--rating"><Icon name="star" /> 5.0 rating</span>
+          <span class="float float--air"><Icon name="wind" /> <span><strong>Removes allergens</strong><small>Improves air quality</small></span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container hero__form"><QuoteForm variant="bar" id="hero-quote" /></div>
+  </section>
+
+  <Ticker />
+
+  <!-- ============================== SERVICES ============================== -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div class="section-head__txt">
+          <p class="eyebrow">Services</p>
+          <h2>What we clean</h2>
+          <p>Six services, one local crew, and a straight answer on price for every one of them.</p>
+        </div>
+        <a class="link-arrow" href="/services">View all services <Icon name="arrow" /></a>
+      </div>
+
+      <ul class="svc-grid">
+        {SERVICES.map((s, i) => <ServiceCard service={s} index={i} delay={(i % 3) * 0.08} />)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================== WHY / HOW ============================== -->
+  <section class="section section--navy why on-dark">
+    <div class="why__bg" aria-hidden="true"><Swoosh id="why" animate={false} /></div>
+    <div class="container why__grid">
+      <div class="why__copy" data-reveal>
+        <p class="eyebrow">Why ArrowMax</p>
+        <h2>Floor cleaning you can count on in Western PA</h2>
+        <p class="lead">
+          When your floors need professional attention, you want a company that shows up, does the job right, and leaves
+          your home looking better than when they arrived. That’s what ArrowMax is here for.
+        </p>
+        <ul class="why__points">
+          <li><span><Icon name="home" /></span><div><strong>Local, and proud of it</strong><p>People in our communities deserve a local floor cleaning company they can actually trust.</p></div></li>
+          <li><span><Icon name="tag" /></span><div><strong>A straight answer on price</strong><p>No surprises, no shortcuts, no upselling. Just clean floors and an honest experience start to finish.</p></div></li>
+          <li><span><Icon name="sparkles" /></span><div><strong>The right method for every surface</strong><p>Ground-in carpet stains, grimy grout, dull hardwood: each gets the solution it actually needs.</p></div></li>
+        </ul>
+        <a class="vet-callout" href="/about/mission-and-values">
+          <span class="vet-callout__icon"><Icon name="shield" /></span>
+          <span class="vet-callout__txt">
+            <strong>Veteran owned &amp; operated</strong>
+            <small>Integrity, discipline, dedication and attention to detail on every job.</small>
+          </span>
+          <Icon name="arrow" class="vet-callout__go" />
+        </a>
+      </div>
+
+      <div class="how" data-reveal style="--d:.1s">
+        <p class="how__label">How it works</p>
+        <ol class="how__list">
+          {
+            steps.map((s, i) => (
+              <li>
+                <span class="how__n">{i + 1}</span>
+                <div><h3>{s.t}</h3><p>{s.d}</p></div>
+              </li>
+            ))
+          }
+        </ol>
+        <a class="btn btn--primary" href="/contact">Start with a free quote <Icon name="arrow" class="i-arrow" /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== RESULTS ============================== -->
+  <section class="section" id="results">
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div class="section-head__txt">
+          <p class="eyebrow">Our work</p>
+          <h2>See the difference</h2>
+          <p>Photos from real jobs. Drag the handle to compare before and after.</p>
+        </div>
+        <a class="link-arrow" href="/gallery">See the full gallery <Icon name="arrow" /></a>
+      </div>
+
+      <div class="results">
+        <div data-reveal>
+          <BeforeAfter
+            before={spotsBefore}
+            after={spotsAfter}
+            beforeAlt="Light carpet before cleaning, covered in dark spots and stains"
+            afterAlt="The same light carpet after cleaning, even in color with the spots gone"
+            caption="Spots and stains"
+            detail="Light carpet"
+          />
+        </div>
+        <div data-reveal style="--d:.1s">
+          <BeforeAfter
+            before={brownBefore}
+            after={brownAfter}
+            beforeAlt="Brown carpet before cleaning, dark and dingy with deep-set dirt"
+            afterAlt="Brown carpet after cleaning, noticeably lighter with the pile freshened"
+            caption="Deep-set dirt"
+            detail="Brown carpet"
+          />
+        </div>
+        <div data-reveal style="--d:.2s">
+          <StaticPair
+            before={officeBefore}
+            after={officeAfter}
+            beforeAlt="Office carpet before cleaning with large dark stains"
+            afterAlt="Office carpet after cleaning, clean and uniform"
+            caption="Office carpet"
+            detail="Large stains lifted"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== RESOURCES ============================== -->
+  <section class="section section--aqua" id="resources">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Resources</p>
+        <h2>Know what you’re dealing with</h2>
+        <p>A closer look at what builds up in your home, and why a professional deep clean reaches what everyday cleaning can’t.</p>
+      </div>
+
+      <div class="res">
+        {
+          RESOURCES.map((r, i) => (
+            <article class:list={['res__card', i === 0 && 'res__card--feature']} data-reveal style={`--d:${i * 0.08}s`}>
+              <div class="res__img"><Image src={r.image} alt={r.alt} widths={[480, 800]} sizes={i === 0 ? '(min-width: 980px) 600px, 92vw' : '(min-width: 980px) 380px, 92vw'} loading="lazy" /></div>
+              <div class="res__body">
+                <span class="res__n">Resource {r.n}</span>
+                <h3>{r.title}</h3>
+                <p>{r.body}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== REVIEWS ============================== -->
+  <section class="section" id="reviews">
+    <div class="container reviews">
+      <div class="reviews__sum" data-reveal>
+        <p class="eyebrow">Reviews</p>
+        <h2>Hear from our happy customers</h2>
+        <div class="reviews__score">
+          <span class="reviews__big">5.0</span>
+          <div>
+            <span class="stars" aria-label="5 out of 5 stars">{[0, 1, 2, 3, 4].map(() => <Icon name="star" />)}</span>
+            <p>5.0 stars · 3 reviews</p>
+          </div>
+        </div>
+        <a class="btn btn--outline" href="/contact">Join them, get a free quote <Icon name="arrow" class="i-arrow" /></a>
+      </div>
+
+      <ul class="reviews__list">
+        {REVIEWS.map((r, i) => <ReviewCard review={r} delay={i * 0.1} />)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================== SERVICE AREA ============================== -->
+  <section class="section section--navy area on-dark" id="area">
+    <div class="area__bg" aria-hidden="true"><Swoosh id="area" animate={false} /></div>
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div class="section-head__txt">
+          <p class="eyebrow">Areas we serve</p>
+          <h2>Proudly serving three Western PA counties</h2>
+          <p>Westmoreland County, Indiana County and Cambria County. Don’t see your town? Give us a call at <a class="area__tel" href={SITE.phoneHref}>{SITE.phone}</a> and we’ll let you know.</p>
+        </div>
+        <a class="link-arrow" href="/areas">All service areas <Icon name="arrow" /></a>
+      </div>
+      <ul class="county-grid">
+        {COUNTIES.map((c, i) => <CountyCard county={c} index={i} delay={i * 0.1} />)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================== FAQ ============================== -->
+  <section class="section section--paper" id="faq">
+    <div class="container faq-wrap">
+      <div class="faq-wrap__head" data-reveal>
+        <p class="eyebrow">Questions</p>
+        <h2>Straight answers</h2>
+        <p class="lead">Everything people ask us before they book. Still wondering? Call or send a message.</p>
+        <div class="faq-wrap__btns">
+          <a class="btn btn--outline" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+          <a class="link-arrow" href="/about/faqs">See all FAQs <Icon name="arrow" /></a>
+        </div>
+      </div>
+      <div data-reveal style="--d:.1s"><FaqList /></div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  /* ---------------- hero ---------------- */
+  .hero {
+    position: relative; overflow: hidden; color: #fff; isolation: isolate;
+    background:
+      radial-gradient(1000px 520px at 88% -8%, rgba(78, 199, 238, .30), transparent 62%),
+      radial-gradient(780px 460px at -4% 100%, rgba(168, 223, 24, .17), transparent 60%),
+      linear-gradient(180deg, var(--navy-900), var(--navy-950));
+    padding-top: clamp(2.5rem, 5vw, 4.5rem);
+  }
+  .hero__bg { position: absolute; z-index: -1; inset: auto 0 0 0; height: 62%; opacity: .5; pointer-events: none; }
+  .hero__grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .hero__copy { display: grid; gap: 1.5rem; justify-items: start; }
+  .hero__copy h1 { max-width: 12ch; }
+  .hero__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .hero__chips .chip { margin: 0; }
+  .chip--vet {
+    text-decoration: none; font-weight: 600; color: var(--navy-950); border-color: transparent;
+    background: linear-gradient(100deg, var(--lime-500), var(--lime-300));
+    box-shadow: 0 8px 22px -8px rgba(168, 223, 24, .7); transition: transform .25s var(--ease), box-shadow .25s;
+  }
+  .chip--vet :global(svg) { width: 1.15em; height: 1.15em; stroke-width: 2.2; }
+  .chip--vet:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -8px rgba(168, 223, 24, .9); }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .4rem; }
+  .hero__proof { display: grid; gap: .65rem; margin-top: .6rem; color: rgba(255, 255, 255, .82); font-size: .98rem; }
+  .hero__proof li { display: flex; align-items: center; gap: .7rem; }
+  .hero__proof :global(.icon:not(.i-star)) { color: var(--lime-500); width: 1.15em; height: 1.15em; }
+  .hero__proof strong { color: #fff; }
+
+  .hero__visual { display: grid; justify-items: center; padding: .5rem; }
+  .hero__frame { position: relative; width: min(100%, 31rem); }
+  .hero__frame::before {
+    content: ''; position: absolute; inset: -14px -14px 14px 14px; border-radius: 34px; z-index: -1;
+    background: linear-gradient(140deg, var(--lime-500), var(--aqua-500)); opacity: .9;
+  }
+  .hero__frame :global(.ba__cap) { display: none; }
+  .hero__frame :global(.ba__frame) { box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .75); }
+
+  .float {
+    position: absolute; z-index: 6; display: inline-flex; align-items: center; gap: .6rem;
+    background: #fff; color: var(--navy-900); border-radius: 999px; padding: .6rem 1rem .6rem .8rem;
+    font-weight: 650; font-size: .92rem; box-shadow: 0 14px 34px -10px rgba(0, 23, 48, .55);
+    animation: bob 5s ease-in-out infinite;
+  }
+  .float :global(svg) { width: 1.2em; height: 1.2em; }
+  .float--rating { top: 1.4rem; left: -1.4rem; }
+  .float--rating :global(svg) { color: #e5a800; }
+  .float--air { right: -1.2rem; top: 38%; border-radius: 18px; animation-delay: -2.4s; }
+  .float--air :global(svg) { color: var(--lime-600); width: 1.6em; height: 1.6em; }
+  .float--air span { display: grid; line-height: 1.2; }
+  .float--air small { font-weight: 500; color: var(--muted); font-size: .78rem; }
+  @keyframes bob { 50% { transform: translateY(-7px); } }
+
+  .hero__form { padding-block: clamp(2.5rem, 5vw, 4rem) clamp(2.5rem, 5vw, 4rem); }
+
+  @media (max-width: 560px) {
+    .hero__copy { justify-items: stretch; }
+    .hero__cta { flex-direction: column; }
+    .hero__cta .btn { width: 100%; }
+    .chip { font-size: .64rem; letter-spacing: .1em; justify-self: start; }
+  }
+  @media (max-width: 960px) {
+    .hero__grid { grid-template-columns: 1fr; }
+    .hero__copy h1 { max-width: 14ch; }
+    .hero__visual { order: 2; }
+    .hero__frame { width: min(100%, 26rem); }
+    .float--rating { left: -.4rem; }
+    .float--air { right: -.4rem; top: auto; bottom: 4.4rem; }
+  }
+
+  .section-head__txt { display: grid; gap: 1rem; }
+
+  /* ---------------- why / how ---------------- */
+  .why { background: linear-gradient(180deg, var(--navy-950), var(--navy-900)); }
+  .why__bg { position: absolute; inset: 0 0 auto 0; height: 55%; opacity: .16; transform: scaleY(-1); pointer-events: none; }
+  .why__grid { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
+  .why__copy { display: grid; gap: 1.4rem; justify-items: start; }
+  .why__points { display: grid; gap: 1.4rem; margin-top: 1rem; }
+  .why__points li { display: grid; grid-template-columns: auto 1fr; gap: 1.1rem; align-items: start; }
+  .why__points li > span {
+    width: 3rem; height: 3rem; border-radius: 14px; display: grid; place-items: center;
+    background: rgba(168, 223, 24, .12); color: var(--lime-500); border: 1px solid rgba(168, 223, 24, .3);
+  }
+  .why__points li > span :global(svg) { width: 1.4rem; height: 1.4rem; }
+  .why__points strong { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: -0.015em; }
+  .why__points p { color: rgba(255, 255, 255, .72); font-size: 1rem; margin-top: .2rem; }
+
+  .vet-callout {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.1rem; width: 100%; margin-top: .6rem;
+    padding: 1.1rem 1.3rem; border-radius: var(--r-md); text-decoration: none; color: #fff;
+    background: linear-gradient(100deg, rgba(168, 223, 24, .16), rgba(78, 199, 238, .1)); border: 1px solid rgba(168, 223, 24, .45);
+    transition: transform .3s var(--ease), border-color .3s, background .3s;
+  }
+  .vet-callout:hover { transform: translateY(-3px); border-color: var(--lime-500); background: linear-gradient(100deg, rgba(168, 223, 24, .24), rgba(78, 199, 238, .14)); }
+  .vet-callout__icon { width: 3rem; height: 3rem; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(120deg, var(--lime-500), var(--lime-300)); color: var(--navy-950); }
+  .vet-callout__icon :global(svg) { width: 1.45rem; height: 1.45rem; stroke-width: 2.1; }
+  .vet-callout__txt { display: grid; line-height: 1.3; }
+  .vet-callout__txt strong { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: -0.015em; }
+  .vet-callout__txt small { color: rgba(255, 255, 255, .75); font-size: .93rem; margin-top: .15rem; }
+  .vet-callout :global(.vet-callout__go) { width: 1.3rem; height: 1.3rem; color: var(--lime-500); transition: transform .3s var(--ease); }
+  .vet-callout:hover :global(.vet-callout__go) { transform: translateX(5px); }
+
+  .how {
+    display: grid; gap: 1.6rem; padding: clamp(1.6rem, 3vw, 2.5rem); border-radius: var(--r-lg);
+    background: rgba(255, 255, 255, .06); border: 1px solid var(--line-dark); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  }
+  .how__label { font-family: var(--font-mono); font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--aqua-300); }
+  .how__list { display: grid; gap: 0; counter-reset: s; position: relative; }
+  .how__list li { position: relative; display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; padding-bottom: 1.8rem; }
+  .how__list li:last-child { padding-bottom: 0; }
+  .how__list li:not(:last-child)::before {
+    content: ''; position: absolute; left: 1.35rem; top: 2.9rem; bottom: .2rem; width: 3px; border-radius: 3px;
+    background: linear-gradient(180deg, var(--lime-500), var(--aqua-500));
+  }
+  .how__n {
+    position: relative; width: 2.8rem; height: 2.8rem; border-radius: 50%; display: grid; place-items: center;
+    background: linear-gradient(120deg, var(--lime-500), var(--lime-300)); color: var(--navy-950);
+    font-family: var(--font-display); font-weight: 750; font-size: 1.25rem; box-shadow: 0 0 0 6px rgba(168, 223, 24, .16);
+  }
+  .how__list h3 { font-size: 1.3rem; }
+  .how__list p { color: rgba(255, 255, 255, .72); font-size: 1rem; margin-top: .3rem; }
+  .how .btn { justify-self: start; }
+  @media (max-width: 920px) { .why__grid { grid-template-columns: 1fr; } }
+
+  /* ---------------- results ---------------- */
+  .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 3vw, 2.4rem); align-items: start; }
+  .results > div { min-width: 0; }
+  @media (max-width: 900px) { .results { grid-template-columns: 1fr; max-width: 30rem; margin-inline: auto; } }
+
+  /* ---------------- resources ---------------- */
+  .res { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
+  .res__card {
+    display: flex; flex-direction: column; background: #fff; border-radius: var(--r-lg); overflow: hidden;
+    border: 1px solid rgba(0, 34, 68, .08); box-shadow: var(--shadow-1); transition: transform .4s var(--ease), box-shadow .4s;
+  }
+  .res__card:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); }
+  .res__card--feature { grid-column: 1 / -1; flex-direction: row; }
+  .res__img { background: #fff; display: grid; place-items: center; padding: 1rem; border-bottom: 1px solid var(--line); }
+  .res__img :global(img) { width: 100%; height: 100%; max-height: 20rem; object-fit: contain; }
+  .res__card--feature .res__img { flex: 1.15; border-bottom: 0; border-right: 1px solid var(--line); padding: 0; }
+  .res__card--feature .res__img :global(img) { max-height: none; object-fit: cover; }
+  .res__body { display: grid; gap: .8rem; padding: 1.8rem; align-content: start; }
+  .res__card--feature .res__body { flex: 1; align-content: center; padding: clamp(1.8rem, 4vw, 3rem); }
+  .res__n { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--lime-700); }
+  .res__body p { color: var(--ink-2); }
+  @media (max-width: 860px) {
+    .res { grid-template-columns: 1fr; }
+    .res__card--feature { flex-direction: column; }
+    .res__card--feature .res__img { border-right: 0; border-bottom: 1px solid var(--line); }
+  }
+
+  /* ---------------- reviews ---------------- */
+  .reviews { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .reviews__sum { display: grid; gap: 1.4rem; position: sticky; top: calc(var(--header-h) + 2rem); }
+  .reviews__score { display: flex; align-items: center; gap: 1.2rem; }
+  .reviews__big { font-family: var(--font-display); font-weight: 780; font-size: clamp(4rem, 8vw, 6rem); line-height: .9; letter-spacing: -0.05em;
+    background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .reviews__score .stars { color: #e5a800; font-size: 1.5rem; }
+  .reviews__score p { color: var(--muted); font-family: var(--font-mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; margin-top: .3rem; }
+  .reviews__sum .btn { justify-self: start; }
+  .reviews__list { display: grid; gap: 1.2rem; }
+  @media (max-width: 920px) { .reviews { grid-template-columns: 1fr; } .reviews__sum { position: static; } }
+
+  /* ---------------- service area ---------------- */
+  .area { background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); }
+  .area__bg { position: absolute; inset: auto 0 0 0; height: 70%; opacity: .22; pointer-events: none; }
+  .area .container { position: relative; }
+  .area__tel { color: var(--lime-500); text-underline-offset: 3px; }
+
+  /* ---------------- faq ---------------- */
+  .faq-wrap { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .faq-wrap__head { display: grid; gap: 1.2rem; position: sticky; top: calc(var(--header-h) + 2rem); }
+  .faq-wrap__btns { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem; }
+  @media (max-width: 920px) { .faq-wrap { grid-template-columns: 1fr; } .faq-wrap__head { position: static; } }
+</style>

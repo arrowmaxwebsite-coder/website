@@ -1,0 +1,241 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import Swoosh from '../../components/Swoosh.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import FaqList from '../../components/FaqList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import CountyCard from '../../components/CountyCard.astro';
+import BeforeAfter from '../../components/BeforeAfter.astro';
+import { SITE, COUNTIES } from '../../config';
+import { SERVICES, RESOURCES, FAQS, type Service } from '../../data/content';
+
+import hallwayBefore from '../../assets/photos/ba-hallway-before.jpg';
+import hallwayAfter from '../../assets/photos/ba-hallway-after.jpg';
+import spotsBefore from '../../assets/photos/ba-spots-before.jpg';
+import spotsAfter from '../../assets/photos/ba-spots-after.jpg';
+import brownBefore from '../../assets/photos/ba-brown-before.jpg';
+import brownAfter from '../../assets/photos/ba-brown-after.jpg';
+
+export function getStaticPaths() {
+  return SERVICES.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service: s } = Astro.props as { service: Service };
+const idx = SERVICES.findIndex((x) => x.slug === s.slug);
+// next three services (wraps around) for the "More services" row
+const more = [1, 2, 3].map((n) => SERVICES[(idx + n) % SERVICES.length]);
+const resource = s.resource !== undefined ? RESOURCES[s.resource] : undefined;
+const faqs = FAQS.filter((f) => f.tags?.includes(s.slug) || f.tags?.includes('all')).slice(0, 5);
+const showResults = s.slug === 'carpet-cleaning';
+
+const crumbs = [{ label: 'Services', href: '/services' }, { label: s.title }];
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: s.title,
+  serviceType: s.title,
+  description: s.seoDesc,
+  url: new URL(Astro.url.pathname, SITE.url).toString(),
+  provider: { '@id': `${SITE.url}/#business` },
+  areaServed: COUNTIES.map((c) => ({ '@type': 'AdministrativeArea', name: `${c.name}, Pennsylvania` })),
+};
+---
+
+<Base title={s.seoTitle} description={s.seoDesc} crumbs={crumbs} schema={[serviceSchema]}>
+  <PageHero {crumbs} eyebrow="Services" title={s.title} accent="in Western PA." lead={s.long}>
+    <div class="phero__cta">
+      <a class="btn btn--primary btn--lg" href={`/contact?service=${s.slug}`}>Get a {s.noun} quote <Icon name="arrow" class="i-arrow" /></a>
+      <a class="btn btn--ghost btn--lg" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+    </div>
+  </PageHero>
+
+  <!-- What we handle -->
+  <section class="section">
+    <div class="container feat">
+      <div class="feat__media" data-reveal>
+        <div class="feat__frame">
+          <Image src={s.image} alt={s.imageAlt} widths={[480, 760]} sizes="(min-width: 900px) 520px, 92vw" loading="eager" />
+        </div>
+      </div>
+      <div class="feat__copy" data-reveal style="--d:.1s">
+        <span class="feat__icon"><Icon name={s.icon} /></span>
+        <p class="eyebrow">What we handle</p>
+        <h2>{s.title}, done right</h2>
+        <p class="lead">{s.blurb}</p>
+        <ul class="feat__points">
+          {s.points.map((p) => <li><Icon name="check" /> <span>{p}</span></li>)}
+        </ul>
+        <div class="feat__cta">
+          <a class="btn btn--primary" href={`/contact?service=${s.slug}`}>Request a free quote <Icon name="arrow" class="i-arrow" /></a>
+          <a class="link-arrow" href="/gallery">See our work <Icon name="arrow" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    resource && (
+      <section class="section section--aqua">
+        <div class="container">
+          <div class="section-head" data-reveal>
+            <p class="eyebrow">Know what you’re dealing with</p>
+            <h2>{resource.title}</h2>
+          </div>
+          <article class="res" data-reveal>
+            <div class="res__img"><Image src={resource.image} alt={resource.alt} widths={[480, 800]} sizes="(min-width: 900px) 560px, 92vw" loading="lazy" /></div>
+            <div class="res__body">
+              <p class="lead">{resource.body}</p>
+              <a class="btn btn--outline" href={`/contact?service=${s.slug}`}>Get a straight answer on price <Icon name="arrow" class="i-arrow" /></a>
+            </div>
+          </article>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    showResults && (
+      <section class="section">
+        <div class="container">
+          <div class="section-head section-head--row" data-reveal>
+            <div class="section-head__txt">
+              <p class="eyebrow">Carpet results</p>
+              <h2>Real carpets. Real difference.</h2>
+              <p>Photos from real jobs. Drag the handle to compare before and after.</p>
+            </div>
+            <a class="link-arrow" href="/gallery">See the full gallery <Icon name="arrow" /></a>
+          </div>
+          <div class="results">
+            <div data-reveal>
+              <BeforeAfter before={hallwayBefore} after={hallwayAfter}
+                beforeAlt="Hallway carpet before cleaning: dull and dark" afterAlt="The same hallway carpet after cleaning: bright with a clean diamond pattern"
+                caption="Hallway carpet" detail="Traffic wear gone" />
+            </div>
+            <div data-reveal style="--d:.1s">
+              <BeforeAfter before={spotsBefore} after={spotsAfter}
+                beforeAlt="Light carpet before cleaning with dark spots" afterAlt="The same light carpet after cleaning, spots gone"
+                caption="Spots and stains" detail="Light carpet" />
+            </div>
+            <div data-reveal style="--d:.2s">
+              <BeforeAfter before={brownBefore} after={brownAfter}
+                beforeAlt="Brown carpet before cleaning, dark with deep-set dirt" afterAlt="Brown carpet after cleaning, lighter and fresher"
+                caption="Deep-set dirt" detail="Brown carpet" />
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Quote + where we offer it -->
+  <section class="section section--navy where on-dark">
+    <div class="where__bg" aria-hidden="true"><Swoosh id="svcwhere" animate={false} /></div>
+    <div class="container where__inner">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Free quote</p>
+        <h2>Get your free {s.noun} quote</h2>
+        <p>Tell us what needs cleaning and where you are. We’ll give you a straight answer on price.</p>
+      </div>
+      <div data-reveal><QuoteForm variant="bar" id="svc-quote" service={s.slug} /></div>
+
+      <div class="section-head where__head" data-reveal>
+        <p class="eyebrow">Where we offer it</p>
+        <h2>{s.title} across three counties</h2>
+      </div>
+      <ul class="county-grid">
+        {COUNTIES.map((c, i) => <CountyCard county={c} index={i} delay={i * 0.1} />)}
+      </ul>
+    </div>
+  </section>
+
+  {
+    faqs.length > 0 && (
+      <section class="section section--paper">
+        <div class="container faq-wrap">
+          <div class="faq-wrap__head" data-reveal>
+            <p class="eyebrow">Questions</p>
+            <h2>{s.title} FAQs</h2>
+            <p class="lead">Straight answers, no jargon. More questions? Call or send a message.</p>
+            <div class="faq-wrap__btns">
+              <a class="btn btn--outline" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+              <a class="link-arrow" href="/about/faqs">See all FAQs <Icon name="arrow" /></a>
+            </div>
+          </div>
+          <div data-reveal style="--d:.1s"><FaqList items={faqs} /></div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div class="section-head__txt">
+          <p class="eyebrow">More services</p>
+          <h2>Also from ArrowMax</h2>
+        </div>
+        <a class="link-arrow" href="/services">View all services <Icon name="arrow" /></a>
+      </div>
+      <ul class="svc-grid">
+        {more.map((m, i) => <ServiceCard service={m} delay={i * 0.08} />)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title={`Ready for ${s.noun} that looks its best?`} />
+</Base>
+
+<style>
+  .phero__cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .6rem; }
+  .section-head__txt { display: grid; gap: 1rem; }
+
+  /* feature split */
+  .feat { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+  .feat > * { min-width: 0; }
+  .feat__media { position: relative; }
+  .feat__media::before { content: ''; position: absolute; z-index: -1; inset: 16px -16px -16px 16px; border-radius: 34px; background: linear-gradient(140deg, var(--lime-500), var(--aqua-500)); opacity: .85; }
+  .feat__frame { border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 5 / 4; box-shadow: var(--shadow-2); background: var(--navy-900); }
+  .feat__frame :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .feat__copy { display: grid; gap: 1.2rem; justify-items: start; }
+  .feat__icon { width: 3.4rem; height: 3.4rem; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(120deg, var(--lime-500), var(--lime-300)); color: var(--navy-950); box-shadow: 0 10px 24px -8px rgba(168, 223, 24, .8); }
+  .feat__icon :global(svg) { width: 1.7rem; height: 1.7rem; }
+  .feat__points { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; width: 100%; }
+  .feat__points li { display: flex; align-items: center; gap: .7rem; padding: .85rem 1rem; border-radius: var(--r-md); background: var(--paper); border: 1px solid var(--line); font-weight: 580; }
+  .feat__points :global(svg) { flex: none; width: 1.4rem; height: 1.4rem; padding: .25rem; border-radius: 50%; background: var(--lime-500); color: var(--navy-950); stroke-width: 3; }
+  .feat__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem; margin-top: .4rem; }
+  .feat__cta .btn { white-space: normal; text-align: center; }
+  @media (max-width: 900px) {
+    .feat { grid-template-columns: minmax(0, 1fr); }
+    .feat__media::before { inset: 12px -10px -12px 10px; }
+  }
+  @media (max-width: 480px) { .feat__points { grid-template-columns: 1fr; } }
+
+  /* resource */
+  .res { display: grid; grid-template-columns: 1.1fr .9fr; background: #fff; border-radius: var(--r-lg); overflow: hidden; border: 1px solid rgba(0, 34, 68, .08); box-shadow: var(--shadow-1); }
+  .res__img { display: grid; place-items: center; padding: 1.2rem; border-right: 1px solid var(--line); }
+  .res__img :global(img) { width: 100%; height: auto; max-height: 28rem; object-fit: contain; }
+  .res__body { display: grid; gap: 1.4rem; align-content: center; justify-items: start; padding: clamp(1.8rem, 4vw, 3.2rem); }
+  @media (max-width: 860px) { .res { grid-template-columns: 1fr; } .res__img { border-right: 0; border-bottom: 1px solid var(--line); } }
+
+  .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 3vw, 2.4rem); align-items: start; }
+  .results > div { min-width: 0; }
+  @media (max-width: 900px) { .results { grid-template-columns: 1fr; max-width: 30rem; margin-inline: auto; } }
+
+  /* quote + counties */
+  .where { background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); }
+  .where__bg { position: absolute; inset: auto 0 0 0; height: 60%; opacity: .2; pointer-events: none; }
+  .where__inner { position: relative; display: grid; gap: 2rem; }
+  .where__inner .section-head { margin-bottom: 0; }
+  .where__head { margin-top: clamp(2rem, 5vw, 4rem); }
+
+  /* faq */
+  .faq-wrap { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .faq-wrap__head { display: grid; gap: 1.2rem; position: sticky; top: calc(var(--header-h) + 2rem); }
+  .faq-wrap__btns { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem; }
+  @media (max-width: 920px) { .faq-wrap { grid-template-columns: 1fr; } .faq-wrap__head { position: static; } }
+</style>

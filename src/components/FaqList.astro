@@ -1,0 +1,41 @@
+---
+import Icon from './Icon.astro';
+import { FAQS, type Faq } from '../data/content';
+interface Props { items?: Faq[]; openFirst?: boolean }
+const { items = FAQS.filter((f) => f.home), openFirst = true } = Astro.props;
+---
+
+<div class="faq">
+  {
+    items.map((f, i) => (
+      <details class="faq__item" open={openFirst && i === 0}>
+        <summary>
+          <span>{f.q}</span>
+          <span class="faq__plus" aria-hidden="true"><Icon name="plus" /></span>
+        </summary>
+        <p>{f.a}</p>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq { display: grid; gap: .8rem; }
+  .faq__item {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--r-md); transition: box-shadow .25s, border-color .25s;
+  }
+  .faq__item[open] { box-shadow: var(--shadow-1); border-color: rgba(78, 199, 238, .55); }
+  .faq__item summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+    padding: 1.25rem 1.5rem; font-family: var(--font-display); font-weight: 640; font-size: 1.15rem; letter-spacing: -0.015em;
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__plus {
+    flex: none; width: 2.2rem; height: 2.2rem; border-radius: 50%; display: grid; place-items: center;
+    background: var(--aqua-100); color: var(--navy-900); transition: transform .3s var(--ease), background .3s;
+  }
+  .faq__plus :global(svg) { width: 1.1rem; height: 1.1rem; stroke-width: 2.4; }
+  .faq__item[open] .faq__plus { transform: rotate(45deg); background: var(--lime-500); }
+  .faq__item p { padding: 0 1.5rem 1.5rem; color: var(--ink-2); max-width: 68ch; }
+  .faq__item summary:hover { color: var(--navy-700); }
+</style>

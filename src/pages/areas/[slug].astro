@@ -1,0 +1,206 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import Swoosh from '../../components/Swoosh.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import FaqList from '../../components/FaqList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import CountyCard from '../../components/CountyCard.astro';
+import ReviewCard from '../../components/ReviewCard.astro';
+import { SITE, COUNTIES, type County } from '../../config';
+import { SERVICES, REVIEWS, type Faq } from '../../data/content';
+
+export function getStaticPaths() {
+  return COUNTIES.map((county) => ({ params: { slug: county.urlSlug }, props: { county } }));
+}
+
+const { county: c } = Astro.props as { county: County };
+const review = REVIEWS.find((r) => r.name === c.reviewName);
+const others = COUNTIES.filter((x) => x.slug !== c.slug);
+const allTowns = [...c.towns, ...c.moreTowns];
+
+const list = (a: string[]) => (a.length > 1 ? `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}` : (a[0] ?? ''));
+const faqs: Faq[] = [
+  {
+    cat: 'areas',
+    q: `Do you serve ${c.seat} and the rest of ${c.name}?`,
+    a: `Yes. ArrowMax serves homeowners across ${c.name}, including ${list(allTowns)}. If your town isn’t listed, call ${SITE.phone} and we’ll let you know.`,
+  },
+  {
+    cat: 'areas',
+    q: `Which services do you offer in ${c.name}?`,
+    a: `All six: ${list(SERVICES.map((s) => s.title.toLowerCase()))}. Tell us about your floors and we’ll give you a straight answer on price.`,
+  },
+  {
+    cat: 'areas',
+    q: `How do I get a free quote in ${c.name}?`,
+    a: `Send a request through our contact page or call ${SITE.phone}. Tell us what needs cleaning and we’ll get back to you with a straight answer on price. No pressure, no surprises.`,
+  },
+];
+
+const crumbs = [{ label: 'Areas We Serve', href: '/areas' }, { label: c.name }];
+---
+
+<Base
+  title={`Carpet & Floor Cleaning in ${c.name}, PA | ArrowMax`}
+  description={`Carpet, tile, hardwood, upholstery, pet urine and rug cleaning in ${c.name}, PA, including ${c.towns.slice(0, 3).join(', ')}. Free quote.`}
+  {crumbs}
+>
+  <PageHero {crumbs} eyebrow={`${c.name}, Pennsylvania`} title="Carpet & floor cleaning in" accent={`${c.name}, PA.`} lead={c.lead}>
+    <div class="phero__cta">
+      <a class="btn btn--primary btn--lg" href={`/contact?county=${c.slug}`}>Get a quote in {c.short} County <Icon name="arrow" class="i-arrow" /></a>
+      <a class="btn btn--ghost btn--lg" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+    </div>
+  </PageHero>
+
+  <!-- Towns -->
+  <section class="section">
+    <div class="container towns">
+      <div class="towns__main" data-reveal>
+        <p class="eyebrow">Towns we serve</p>
+        <h2>Serving homes across {c.name}</h2>
+        <p class="lead">From {c.towns.slice(0, 3).join(', ')} and beyond. If your town isn’t listed, call us at <a class="tel" href={SITE.phoneHref}>{SITE.phone}</a> and we’ll let you know.</p>
+        <ul class="towns__chips">
+          {allTowns.map((t) => <li><Icon name="pin" /> {t}</li>)}
+        </ul>
+      </div>
+      <aside class="facts on-dark" data-reveal style="--d:.1s">
+        <p class="facts__label">At a glance</p>
+        <dl>
+          <div><dt>County</dt><dd>{c.name}, PA</dd></div>
+          <div><dt>County seat</dt><dd>{c.seat}</dd></div>
+          <div><dt>Services offered</dt><dd>All six</dd></div>
+          <div><dt>Quotes</dt><dd>Free, no pressure</dd></div>
+        </dl>
+        <a class="btn btn--primary" href={`/contact?county=${c.slug}`}>Get a free quote <Icon name="arrow" class="i-arrow" /></a>
+        <a class="facts__tel" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div class="section-head__txt">
+          <p class="eyebrow">Services in {c.short} County</p>
+          <h2>Everything we clean in {c.short} County</h2>
+          <p>Six services, one local crew, and a straight answer on price for every one of them.</p>
+        </div>
+        <a class="link-arrow" href="/services">View all services <Icon name="arrow" /></a>
+      </div>
+      <ul class="svc-grid">
+        {SERVICES.map((s, i) => <ServiceCard service={s} index={i} delay={(i % 3) * 0.08} />)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Review -->
+  {
+    review && (
+      <section class="section">
+        <div class="container say">
+          <div class="say__head" data-reveal>
+            <p class="eyebrow">From your neighbors</p>
+            <h2>What {c.short} County customers say</h2>
+            <p class="lead">Real feedback from a customer in {review.place.replace(', PA', '')}.</p>
+          </div>
+          <ul class="say__list"><ReviewCard review={review} /></ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Quote -->
+  <section class="section section--navy quote on-dark">
+    <div class="quote__bg" aria-hidden="true"><Swoosh id="countyq" animate={false} /></div>
+    <div class="container quote__inner">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Free quote</p>
+        <h2>Get your free quote in {c.short} County</h2>
+        <p>Tell us what needs cleaning. We’ll give you a straight answer on price, with no pressure.</p>
+      </div>
+      <div data-reveal><QuoteForm variant="bar" id="county-quote" county={c.slug} /></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section--paper">
+    <div class="container faq-wrap">
+      <div class="faq-wrap__head" data-reveal>
+        <p class="eyebrow">Questions</p>
+        <h2>{c.name} FAQs</h2>
+        <p class="lead">Quick answers for {c.short} County homeowners.</p>
+        <a class="link-arrow" href="/about/faqs">See all FAQs <Icon name="arrow" /></a>
+      </div>
+      <div data-reveal style="--d:.1s"><FaqList items={faqs} /></div>
+    </div>
+  </section>
+
+  <!-- Other counties -->
+  <section class="section section--navy others on-dark">
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div class="section-head__txt">
+          <p class="eyebrow">Also serving</p>
+          <h2>Our other service areas</h2>
+        </div>
+        <a class="link-arrow" href="/areas">All service areas <Icon name="arrow" /></a>
+      </div>
+      <ul class="others__grid">
+        {others.map((o, i) => <CountyCard county={o} index={COUNTIES.indexOf(o)} delay={i * 0.1} />)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title={`Need a floor cleaner in ${c.short} County?`} />
+</Base>
+
+<style>
+  .phero__cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .6rem; }
+  .section-head__txt { display: grid; gap: 1rem; }
+  .tel { color: var(--navy-700); font-weight: 650; text-underline-offset: 3px; }
+
+  /* towns */
+  .towns { display: grid; grid-template-columns: 1.3fr .7fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .towns > * { min-width: 0; }
+  .towns__main { display: grid; gap: 1.2rem; justify-items: start; }
+  .towns__chips { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .6rem; }
+  .towns__chips li { display: inline-flex; align-items: center; gap: .5rem; padding: .55rem 1rem; border-radius: 999px; background: var(--paper); border: 1px solid var(--line); font-weight: 560; color: var(--navy-900); }
+  .towns__chips :global(svg) { width: 1rem; height: 1rem; color: var(--lime-600); }
+  .facts { display: grid; gap: 1.2rem; padding: clamp(1.6rem, 3vw, 2.4rem); border-radius: var(--r-lg); color: #fff; background: linear-gradient(150deg, var(--navy-900), var(--navy-800)); box-shadow: var(--shadow-2); }
+  .facts__label { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--aqua-300); }
+  .facts dl { display: grid; gap: .1rem; }
+  .facts dl > div { display: flex; justify-content: space-between; gap: 1rem; padding: .8rem 0; border-bottom: 1px solid var(--line-dark); }
+  .facts dt { color: rgba(255, 255, 255, .7); }
+  .facts dd { margin: 0; font-weight: 650; text-align: right; }
+  .facts .btn { justify-self: stretch; }
+  .facts__tel { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; text-decoration: none; color: #fff; font-weight: 650; }
+  .facts__tel :global(svg) { color: var(--lime-500); }
+  .facts__tel:hover { color: var(--lime-500); }
+  @media (max-width: 900px) { .towns { grid-template-columns: minmax(0, 1fr); } }
+
+  /* review */
+  .say { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .say__head { display: grid; gap: 1rem; }
+  .say__list { display: grid; }
+  @media (max-width: 900px) { .say { grid-template-columns: 1fr; } }
+
+  /* quote */
+  .quote { background: linear-gradient(180deg, var(--navy-900), var(--navy-950)); }
+  .quote__bg { position: absolute; inset: auto 0 0 0; height: 60%; opacity: .2; pointer-events: none; }
+  .quote__inner { position: relative; display: grid; gap: 2rem; }
+  .quote__inner .section-head { margin-bottom: 0; }
+
+  /* faq */
+  .faq-wrap { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .faq-wrap__head { display: grid; gap: 1.2rem; justify-items: start; position: sticky; top: calc(var(--header-h) + 2rem); }
+  @media (max-width: 920px) { .faq-wrap { grid-template-columns: 1fr; } .faq-wrap__head { position: static; } }
+
+  /* others */
+  .others { background: linear-gradient(180deg, var(--navy-950), var(--navy-900)); }
+  .others__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
+  @media (max-width: 700px) { .others__grid { grid-template-columns: 1fr; } }
+</style>

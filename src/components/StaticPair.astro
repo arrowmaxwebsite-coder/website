@@ -1,0 +1,53 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  before: ImageMetadata;
+  after: ImageMetadata;
+  beforeAlt: string;
+  afterAlt: string;
+  caption?: string;
+  detail?: string;
+  ratio?: string;
+  direction?: 'stack' | 'side';
+}
+const { before, after, beforeAlt, afterAlt, caption, detail, ratio = '4 / 5', direction = 'stack' } = Astro.props;
+---
+
+<figure class="pair">
+  <div class:list={['pair__frame', `pair__frame--${direction}`]} style={`aspect-ratio:${ratio}`}>
+    <div class="pair__item">
+      <Image src={before} alt={beforeAlt} loading="lazy" decoding="async" />
+      <span class="ba__tag ba__tag--before">Before</span>
+    </div>
+    <div class="pair__item">
+      <Image src={after} alt={afterAlt} loading="lazy" decoding="async" />
+      <span class="ba__tag ba__tag--after">After</span>
+    </div>
+  </div>
+  {
+    caption && (
+      <figcaption class="ba__cap">
+        <strong>{caption}</strong>
+        {detail && <span>{detail}</span>}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .pair__frame {
+    display: grid; gap: 3px; border-radius: var(--r-lg); overflow: hidden; background: #fff;
+    box-shadow: var(--shadow-2);
+  }
+  .pair__frame--stack { grid-template-rows: 1fr 1fr; }
+  .pair__frame--side { grid-template-columns: 1fr 1fr; }
+  .pair__item { position: relative; overflow: hidden; min-height: 0; }
+  .pair__item :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
+  .pair__frame:hover .pair__item :global(img) { transform: scale(1.04); }
+  .pair__item .ba__tag { bottom: .75rem; }
+  .pair__frame--side .ba__tag--before { left: .75rem; }
+  .pair__frame--side .ba__tag--after { right: auto; left: .75rem; }
+  .pair__frame--stack .ba__tag--after { right: auto; left: 1rem; }
+</style>

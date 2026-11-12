@@ -1,0 +1,22 @@
+{
+  "name": "arrowmax-website",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ArrowMax Clean — carpet & floor cleaning in Westmoreland, Indiana & Cambria County, PA",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "prep:images": "node scripts/prep-images.mjs",
+    "prep:brand": "node scripts/make-brand-assets.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "astro": "^7.4.11",
+    "sharp": "^0.35.5"
+  }
+}

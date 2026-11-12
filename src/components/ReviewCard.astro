@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+import type { Review } from '../data/content';
+
+interface Props { review: Review; delay?: number }
+const { review: r, delay = 0 } = Astro.props;
+---
+
+<li class="review" data-reveal style={`--d:${delay}s`}>
+  <Icon name="quote" class="review__q" />
+  <blockquote>“{r.quote}”</blockquote>
+  <footer>
+    <span class="review__av" aria-hidden="true">{r.name[0]}</span>
+    <div>
+      <strong>{r.name}</strong>
+      <span>{r.place} · {r.service}</span>
+    </div>
+    <span class="stars" aria-label="5 stars">{[0, 1, 2, 3, 4].map(() => <Icon name="star" />)}</span>
+  </footer>
+</li>
+
+<style>
+  .review {
+    position: relative; display: grid; gap: 1.3rem; padding: clamp(1.5rem, 3vw, 2.2rem); background: #fff; border: 1px solid var(--line);
+    border-radius: var(--r-lg); box-shadow: var(--shadow-1); transition: transform .35s var(--ease), box-shadow .35s;
+  }
+  .review:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); }
+  .review :global(.review__q) { width: 2.4rem; height: 2.4rem; color: var(--aqua-500); opacity: .55; }
+  .review blockquote { font-family: var(--font-display); font-size: clamp(1.15rem, 1rem + .6vw, 1.45rem); line-height: 1.4; letter-spacing: -0.015em; font-weight: 520; color: var(--ink); text-wrap: pretty; }
+  .review footer { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .review footer > div { display: grid; line-height: 1.3; flex: 1; min-width: 10rem; }
+  .review footer span:not(.review__av):not(.stars) { color: var(--muted); font-size: .92rem; }
+  .review__av { width: 2.8rem; height: 2.8rem; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; color: var(--navy-950); background: linear-gradient(135deg, var(--lime-500), var(--aqua-500)); }
+  .review .stars { color: #e5a800; }
+</style>

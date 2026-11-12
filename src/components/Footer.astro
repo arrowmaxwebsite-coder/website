@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import Icon from './Icon.astro';
+import { SITE, COUNTIES, ABOUT_LINKS } from '../config';
+import { SERVICES } from '../data/content';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__swoosh" aria-hidden="true">
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="fg" x1="0" x2="1">
+          <stop offset="0" stop-color="#6CB01E" /><stop offset=".45" stop-color="#D3F516" /><stop offset="1" stop-color="#4EC7EE" />
+        </linearGradient>
+      </defs>
+      <path d="M-20 120 C 300 160, 900 140, 1460 20 C 980 170, 420 190, -20 130 Z" fill="url(#fg)" opacity=".9" />
+    </svg>
+  </div>
+
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a href="/" aria-label="ArrowMax Clean, home"><Image src={logo} alt="ArrowMax Clean" width={170} loading="lazy" /></a>
+      <p>Trusted local carpet, tile, hardwood, upholstery and rug cleaning for homes across Westmoreland, Indiana and Cambria County, PA.</p>
+      <a class="footer__vet" href="/about/mission-and-values"><Icon name="shield" /> Veteran owned &amp; operated</a>
+      <ul class="footer__contact">
+        <li><a href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a></li>
+        <li><a href={`mailto:${SITE.email}`}><Icon name="mail" /> {SITE.email}</a></li>
+      </ul>
+      <a class="btn btn--primary" href="/contact">Get your free quote <Icon name="arrow" class="i-arrow" /></a>
+    </div>
+
+    <!-- Column order mirrors the main menu: (Home = logo block) → About → Services → Areas We Serve → Gallery -->
+    <nav class="footer__col" aria-label="About">
+      <h2>About</h2>
+      <ul>
+        {ABOUT_LINKS.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav class="footer__col" aria-label="Services">
+      <h2>Services</h2>
+      <ul>
+        {SERVICES.map((s) => <li><a href={`/services/${s.slug}`}>{s.title}</a></li>)}
+        <li><a href="/services" class="footer__all">All services <Icon name="arrow" /></a></li>
+      </ul>
+    </nav>
+
+    <nav class="footer__col" aria-label="Areas we serve">
+      <h2>Areas we serve</h2>
+      <ul>
+        {COUNTIES.map((c) => <li><a href={c.path}>{c.name}</a></li>)}
+        <li><a href="/areas" class="footer__all">All service areas <Icon name="arrow" /></a></li>
+      </ul>
+      <p class="footer__note">Western Pennsylvania</p>
+    </nav>
+
+    <nav class="footer__col" aria-label="Gallery">
+      <h2>Gallery</h2>
+      <ul>
+        <li><a href="/gallery#before-after">Before &amp; after</a></li>
+        <li><a href="/gallery#on-the-job">On the job</a></li>
+        <li><a href="/gallery" class="footer__all">View gallery <Icon name="arrow" /></a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container footer__bar">
+    <p>© {year} ArrowMax. All rights reserved.</p>
+    <p class="footer__legal">
+      <a href="/privacy-policy">Data Privacy Policy</a>
+      <a href="/terms">Terms of Use</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer { position: relative; background: var(--navy-950); color: rgba(255, 255, 255, .78); padding-top: 7.5rem; overflow: hidden; }
+  .footer__swoosh { position: absolute; top: 0; left: 0; right: 0; height: 110px; opacity: .9; }
+  .footer__swoosh svg { width: 100%; height: 100%; }
+  .footer__grid { display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: clamp(1.5rem, 3.5vw, 3rem); padding-bottom: 3.5rem; position: relative; }
+  .footer__brand { display: grid; gap: 1.2rem; align-content: start; max-width: 34ch; }
+  .footer__brand p { font-size: .98rem; }
+  .footer__vet {
+    display: inline-flex; align-items: center; gap: .55rem; justify-self: start; padding: .45rem .9rem; border-radius: 999px; text-decoration: none;
+    font-family: var(--font-mono); font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--lime-500); background: rgba(168, 223, 24, .12); border: 1px solid rgba(168, 223, 24, .4); transition: background .2s, color .2s;
+  }
+  .footer__vet :global(svg) { width: 1.1rem; height: 1.1rem; }
+  .footer__vet:hover { background: var(--lime-500); color: var(--navy-950); }
+  .footer__contact { display: grid; gap: .6rem; }
+  .footer__contact a { display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; color: #fff; font-weight: 560; }
+  .footer__contact a:hover { color: var(--lime-500); }
+  .footer__contact :global(svg) { color: var(--lime-500); }
+  .footer__brand .btn { justify-self: start; }
+  .footer__col h2 { font-family: var(--font-mono); font-weight: 500; font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--aqua-300); margin-bottom: 1.1rem; }
+  .footer__col ul { display: grid; gap: .6rem; }
+  .footer__col a { text-decoration: none; transition: color .2s, padding .2s; }
+  .footer__col a:hover { color: var(--lime-500); padding-left: 4px; }
+  .footer__all { display: inline-flex; align-items: center; gap: .4rem; color: var(--lime-500); font-weight: 600; }
+  .footer__all :global(svg) { width: 1em; height: 1em; }
+  .footer__note { margin-top: 1rem; font-size: .9rem; color: rgba(255, 255, 255, .55); }
+  .footer__bar {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
+    padding-block: 1.6rem; border-top: 1px solid var(--line-dark); font-size: .9rem; color: rgba(255, 255, 255, .6);
+  }
+  .footer__legal { display: flex; gap: 1.5rem; }
+  .footer__legal a { text-decoration: none; }
+  .footer__legal a:hover { color: #fff; text-decoration: underline; }
+  @media (max-width: 1100px) { .footer__grid { grid-template-columns: 1fr 1fr; } .footer__brand { grid-column: 1 / -1; max-width: none; } }
+  @media (max-width: 520px) { .footer__grid { grid-template-columns: 1fr; } }
+</style>

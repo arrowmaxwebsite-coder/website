@@ -1,0 +1,184 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { COUNTIES } from '../../config';
+import photo from '../../assets/photos/job-carpet-wand.jpg';
+
+const crumbs = [{ label: 'About' }];
+
+const values = [
+  { icon: 'home', t: 'Local', d: 'We built this business around a simple idea: people in our communities deserve a local floor cleaning company they can actually trust.' },
+  { icon: 'tag', t: 'No surprises', d: 'A straight answer on price before we start. No pressure, no upselling, no shortcuts.' },
+  { icon: 'sparkles', t: 'Done right', d: 'We show up, do the job right, and leave your home looking better than when we arrived.' },
+];
+
+const more = [
+  { href: '/about/mission-and-values', icon: 'shield', t: 'Our Mission & Values', d: 'Veteran owned & operated, with roots in the cleaning industry dating back to 1975.' },
+  { href: '/about/faqs', icon: 'help', t: 'FAQs', d: 'Straight answers about pricing, our services and where we work.' },
+  { href: '/contact', icon: 'mail', t: 'Contact Us', d: 'Call or send a request for a free quote, with no pressure.' },
+];
+---
+
+<Base
+  title="About ArrowMax | Local Floor Cleaning in Western PA"
+  description="ArrowMax is a local Western PA floor cleaning company serving Westmoreland, Indiana and Cambria County. No surprises, no shortcuts."
+  {crumbs}
+>
+  <PageHero {crumbs} eyebrow="About ArrowMax" title="Floor cleaning you can count on" accent="in Western PA." />
+
+  <section class="section who">
+    <div class="container who__grid">
+      <div class="who__media" data-reveal>
+        <div class="who__frame">
+          <Image src={photo} alt="ArrowMax carpet extraction wand cleaning carpet beside a doorway" widths={[480, 760]} sizes="(min-width: 900px) 460px, 92vw" />
+        </div>
+        <div class="who__badge"><span class="chip__dot" style="background:var(--lime-600)"></span><strong>Local</strong><small>Western PA company</small></div>
+      </div>
+
+      <div class="who__copy" data-reveal style="--d:.1s">
+        <p class="eyebrow">Who we are</p>
+        <h2>A local crew that shows up and does the job right</h2>
+        <p class="lead">
+          When your floors need professional attention, you want a company that shows up, does the job right, and leaves your
+          home looking better than when they arrived. That’s what ArrowMax is here for.
+        </p>
+        <p>
+          We provide carpet cleaning, tile and grout cleaning, and hardwood floor cleaning to homeowners across Westmoreland
+          County, Indiana County, and Cambria County, PA. We built this business around a simple idea: people in our communities
+          deserve a local floor cleaning company they can actually trust.
+        </p>
+        <p>
+          No surprises, no shortcuts. Just clean floors and a straightforward experience from start to finish. Whether you’re
+          dealing with ground-in carpet stains, grimy grout lines, or dull hardwood that’s lost its shine, we have the right
+          solution. If you’re in western Pennsylvania and need your floors refreshed, ArrowMax is ready to help.
+        </p>
+        <div class="who__cta">
+          <a class="btn btn--primary btn--lg" href="/contact">Get your free quote <Icon name="arrow" class="i-arrow" /></a>
+          <a class="link-arrow" href="/gallery">See our work <Icon name="arrow" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">What we stand for</p>
+        <h2>Simple, honest, local</h2>
+      </div>
+      <ul class="values">
+        {
+          values.map((v, i) => (
+            <li class="value" data-reveal style={`--d:${i * 0.1}s`}>
+              <span><Icon name={v.icon} /></span>
+              <h3>{v.t}</h3>
+              <p>{v.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">More about ArrowMax</p>
+        <h2>Get to know us</h2>
+      </div>
+      <ul class="more">
+        {
+          more.map((m, i) => (
+            <li class="mcard" data-reveal style={`--d:${i * 0.1}s`}>
+              <span class="mcard__icon"><Icon name={m.icon} /></span>
+              <h3><a href={m.href}>{m.t}</a></h3>
+              <p>{m.d}</p>
+              <span class="mcard__go">Read more <Icon name="arrow" /></span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--navy where on-dark">
+    <div class="container where__inner">
+      <div class="where__copy" data-reveal>
+        <p class="eyebrow">Service area</p>
+        <h2>Where we work</h2>
+        <p class="lead">Homes across three counties in western Pennsylvania.</p>
+        <a class="link-arrow" href="/areas">All service areas <Icon name="arrow" /></a>
+      </div>
+      <ul class="where__list">
+        {
+          COUNTIES.map((c, i) => (
+            <li data-reveal style={`--d:${i * 0.1}s`}>
+              <span class="where__n">0{i + 1}</span>
+              <div><strong><a href={c.path}>{c.name}</a></strong><small>Pennsylvania</small></div>
+              <a class="where__go" href={c.path} aria-label={`Explore ${c.name}`}><Icon name="arrow" /></a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .who__grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+  .who__media { position: relative; }
+  .who__frame { border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 4 / 5; box-shadow: var(--shadow-2); background: var(--navy-900); }
+  .who__frame :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .who__media::before { content: ''; position: absolute; z-index: -1; inset: 16px -16px -16px 16px; border-radius: 34px; background: linear-gradient(140deg, var(--lime-500), var(--aqua-500)); opacity: .85; }
+  .who__badge {
+    position: absolute; left: -1.2rem; bottom: 2rem; display: grid; grid-template-columns: auto 1fr; gap: 0 .6rem; align-items: center;
+    background: #fff; padding: .8rem 1.2rem; border-radius: 18px; box-shadow: 0 16px 36px -12px rgba(0, 23, 48, .5);
+  }
+  .who__badge strong { font-family: var(--font-display); font-size: 1.2rem; }
+  .who__badge small { grid-column: 2; color: var(--muted); font-family: var(--font-mono); font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; }
+  .who__copy { display: grid; gap: 1.2rem; }
+  .who__copy p:not(.lead):not(.eyebrow) { color: var(--ink-2); max-width: 62ch; }
+  .who__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem; margin-top: .6rem; }
+  @media (max-width: 900px) { .who__grid { grid-template-columns: 1fr; } .who__media { max-width: 26rem; } .who__badge { left: .5rem; } }
+
+  .values { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
+  .value { display: grid; gap: .8rem; align-content: start; padding: clamp(1.6rem, 3vw, 2.2rem); background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); transition: transform .35s var(--ease), box-shadow .35s; }
+  .value:hover { transform: translateY(-5px); box-shadow: var(--shadow-2); }
+  .value > span { width: 3.4rem; height: 3.4rem; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(120deg, var(--lime-500), var(--lime-300)); color: var(--navy-950); }
+  .value > span :global(svg) { width: 1.6rem; height: 1.6rem; }
+  .value p { color: var(--ink-2); }
+  @media (max-width: 860px) { .values { grid-template-columns: 1fr; } }
+
+  .more { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
+  .mcard { position: relative; display: grid; gap: .7rem; align-content: start; padding: clamp(1.6rem, 3vw, 2.2rem); background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-lg); transition: transform .35s var(--ease), box-shadow .35s, border-color .35s; }
+  .mcard:hover { transform: translateY(-5px); box-shadow: var(--shadow-2); border-color: rgba(78, 199, 238, .6); background: #fff; }
+  .mcard__icon { width: 3.2rem; height: 3.2rem; border-radius: 16px; display: grid; place-items: center; background: var(--navy-900); color: var(--lime-500); }
+  .mcard__icon :global(svg) { width: 1.5rem; height: 1.5rem; }
+  .mcard h3 a { text-decoration: none; }
+  .mcard h3 a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+  .mcard p { color: var(--ink-2); }
+  .mcard__go { display: inline-flex; align-items: center; gap: .5rem; margin-top: .3rem; font-weight: 650; color: var(--navy-700); }
+  .mcard__go :global(svg) { width: 1.1em; height: 1.1em; transition: transform .3s var(--ease); }
+  .mcard:hover .mcard__go :global(svg) { transform: translateX(5px); }
+  @media (max-width: 860px) { .more { grid-template-columns: 1fr; } }
+
+  .where { background: linear-gradient(120deg, var(--navy-900), var(--navy-950)); }
+  .where__inner { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+  .where__copy { display: grid; gap: 1rem; justify-items: start; }
+  .where__list { display: grid; gap: .8rem; }
+  .where__list li { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.2rem; padding: 1.2rem 1.5rem; border-radius: var(--r-md); background: rgba(255, 255, 255, .06); border: 1px solid var(--line-dark); transition: background .3s, border-color .3s, transform .3s var(--ease); }
+  .where__list li:hover { background: rgba(255, 255, 255, .1); border-color: rgba(168, 223, 24, .5); transform: translateX(6px); }
+  .where__n { font-family: var(--font-mono); color: var(--lime-500); letter-spacing: .12em; }
+  .where__list strong { display: block; font-family: var(--font-display); font-size: 1.4rem; letter-spacing: -0.02em; }
+  .where__list strong a { text-decoration: none; }
+  .where__list strong a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+  .where__list small { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--aqua-300); }
+  .where__go { width: 2.8rem; height: 2.8rem; border-radius: 50%; display: grid; place-items: center; background: var(--lime-500); color: var(--navy-950); }
+  .where__go :global(svg) { width: 1.2rem; height: 1.2rem; }
+  @media (max-width: 860px) { .where__inner { grid-template-columns: 1fr; } }
+</style>

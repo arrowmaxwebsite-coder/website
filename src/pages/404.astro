@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Swoosh from '../components/Swoosh.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../config';
+---
+
+<Base title="Page not found | ArrowMax" description="That page couldn't be found." index={false}>
+  <section class="nf on-dark">
+    <div class="nf__bg" aria-hidden="true"><Swoosh id="nf" /></div>
+    <div class="container nf__inner">
+      <p class="eyebrow">Error 404</p>
+      <h1>This page got <span class="grad-text">swept away.</span></h1>
+      <p class="lead">The page you’re looking for isn’t here, but a free quote is only a click away.</p>
+      <div class="nf__cta">
+        <a class="btn btn--primary btn--lg" href="/">Back to home <Icon name="arrow" class="i-arrow" /></a>
+        <a class="btn btn--ghost btn--lg" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { position: relative; overflow: hidden; color: #fff; min-height: 70vh; display: grid; align-items: center; padding-block: 5rem;
+    background: radial-gradient(900px 480px at 85% 0%, rgba(78, 199, 238, .28), transparent 60%), var(--navy-900); }
+  .nf__bg { position: absolute; inset: auto 0 0 0; height: 65%; opacity: .5; }
+  .nf__inner { position: relative; display: grid; gap: 1.2rem; justify-items: start; }
+  .nf__cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .6rem; }
+</style>

@@ -1,0 +1,187 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import Swoosh from '../../components/Swoosh.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+const crumbs = [{ label: 'About', href: '/about' }, { label: 'Mission & Values' }];
+
+/*
+ * Source for the copy below, as supplied by the owner/client:
+ *  - "With roots in the cleaning industry dating back to 1975, our commitment to quality workmanship, dependable
+ *     service, and customer satisfaction runs deep."
+ *  - "VETERAN OWNED & OPERATED. Built on the same values that define military service — integrity, discipline,
+ *     dedication, and attention to detail — ArrowMax Clean brings pride and professionalism to every job."
+ * The mission statement and the one-line explanations of each value are drafted from the above and the existing
+ * site copy: have the owner approve the wording before launch.
+ */
+const pillars = [
+  { icon: 'award', t: 'Quality workmanship', d: 'The right method for every surface, from ground-in carpet stains to grimy grout and dull hardwood, done carefully and done right.' },
+  { icon: 'shield', t: 'Dependable service', d: 'We show up, do the job right, and leave your home looking better than when we arrived.' },
+  { icon: 'heart', t: 'Customer satisfaction', d: 'A straight answer on price, no pressure, and no surprises, from the first call to the finished floor.' },
+];
+
+const values = [
+  { icon: 'shield', t: 'Integrity', d: 'We tell you the price up front and tell you the truth about what we can do. No pressure, no surprises.' },
+  { icon: 'flag', t: 'Discipline', d: 'The right method, the right way, every time. We treat every floor like it matters, because to you it does.' },
+  { icon: 'heart', t: 'Dedication', d: 'We stay with the job until it is done right, and treat your home with the respect it deserves.' },
+  { icon: 'eye', t: 'Attention to detail', d: 'From the edge of a grout line to the finish on your hardwood, the small things get the same care as the big ones.' },
+];
+
+const stats = [
+  { n: '1975', l: 'Roots in the cleaning industry' },
+  { n: '3', l: 'Counties served' },
+  { n: '6', l: 'Cleaning services' },
+  { n: '5.0', l: 'Customer rating' },
+];
+---
+
+<Base
+  title="Our Mission & Values | Veteran Owned ArrowMax"
+  description="ArrowMax is veteran owned and operated, with roots in the cleaning industry dating back to 1975. Meet the mission and values behind every job."
+  {crumbs}
+>
+  <PageHero
+    {crumbs}
+    eyebrow="About ArrowMax"
+    title="Our mission"
+    accent="& values."
+    lead="With roots in the cleaning industry dating back to 1975, our commitment to quality workmanship, dependable service, and customer satisfaction runs deep."
+  >
+    <ul class="hero-badges">
+      <li><Icon name="shield" /> Veteran owned &amp; operated</li>
+      <li><Icon name="award" /> Roots in cleaning since 1975</li>
+    </ul>
+  </PageHero>
+
+  <!-- Mission + pillars -->
+  <section class="section">
+    <div class="container mission">
+      <div class="mission__card on-dark" data-reveal>
+        <span class="mission__icon"><Icon name="target" /></span>
+        <p class="eyebrow">Our mission</p>
+        <blockquote>
+          To give homeowners across Westmoreland, Indiana and Cambria County floors and furniture that look and feel fresh
+          again, through quality workmanship, dependable service, and a straight answer on price.
+        </blockquote>
+      </div>
+
+      <ul class="pillars">
+        {
+          pillars.map((p, i) => (
+            <li class="pillar" data-reveal style={`--d:${i * 0.1}s`}>
+              <span><Icon name={p.icon} /></span>
+              <div><h3>{p.t}</h3><p>{p.d}</p></div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Veteran owned -->
+  <section class="section section--navy vet on-dark">
+    <div class="vet__bg" aria-hidden="true"><Swoosh id="vet" animate={false} /></div>
+    <div class="container">
+      <div class="vet__head" data-reveal>
+        <span class="vet__badge"><Icon name="shield" /> Veteran owned &amp; operated</span>
+        <h2>Built on the values that define military service</h2>
+        <p class="lead">
+          Integrity, discipline, dedication, and attention to detail: ArrowMax Clean brings pride and professionalism to every job.
+        </p>
+      </div>
+
+      <ul class="values">
+        {
+          values.map((v, i) => (
+            <li class="value" data-reveal style={`--d:${i * 0.08}s`}>
+              <span class="value__icon"><Icon name={v.icon} /></span>
+              <h3>{v.t}</h3>
+              <p>{v.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- By the numbers -->
+  <section class="section section--tight">
+    <div class="container">
+      <ul class="stats" data-reveal>
+        {stats.map((s) => <li><strong>{s.n}</strong><span>{s.l}</span></li>)}
+      </ul>
+      <p class="stats__note">Customer rating based on 3 reviews. Roots in the cleaning industry dating back to 1975.</p>
+    </div>
+  </section>
+
+  <!-- See it in practice -->
+  <section class="section section--paper practice">
+    <div class="container practice__inner" data-reveal>
+      <div>
+        <p class="eyebrow">Values in action</p>
+        <h2>See the values in the work</h2>
+        <p class="lead">Words are easy. Browse real before-and-after photos, read what customers say, then get a straight answer on price.</p>
+      </div>
+      <div class="practice__links">
+        <a class="btn btn--primary btn--lg" href="/gallery">See our work <Icon name="arrow" class="i-arrow" /></a>
+        <a class="link-arrow" href="/#reviews">Read customer reviews <Icon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .hero-badges { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .6rem; }
+  .hero-badges li { display: inline-flex; align-items: center; gap: .55rem; padding: .55rem 1rem; border-radius: 999px; font-weight: 600; font-size: .95rem; background: rgba(255, 255, 255, .1); border: 1px solid var(--line-dark); }
+  .hero-badges :global(svg) { width: 1.15rem; height: 1.15rem; color: var(--lime-500); }
+
+  .mission { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .mission > * { min-width: 0; }
+  .mission__card {
+    position: relative; overflow: hidden; display: grid; gap: 1.2rem; padding: clamp(1.8rem, 4vw, 3.2rem); border-radius: var(--r-lg); color: #fff;
+    background: linear-gradient(140deg, var(--navy-900), var(--navy-800) 70%, #0b5a8f); box-shadow: var(--shadow-2);
+  }
+  .mission__card::after { content: ''; position: absolute; right: -20%; bottom: -45%; width: 70%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, rgba(168, 223, 24, .3), transparent); pointer-events: none; }
+  .mission__icon { width: 3.4rem; height: 3.4rem; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(120deg, var(--lime-500), var(--lime-300)); color: var(--navy-950); }
+  .mission__icon :global(svg) { width: 1.7rem; height: 1.7rem; }
+  .mission blockquote { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.4rem, 1.05rem + 1.6vw, 2.1rem); line-height: 1.25; letter-spacing: -0.025em; text-wrap: balance; position: relative; z-index: 1; }
+
+  .pillars { display: grid; gap: 1rem; }
+  .pillar { display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; align-items: start; padding: 1.4rem 1.5rem; background: #fff; border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: var(--shadow-1); transition: transform .3s var(--ease), box-shadow .3s; }
+  .pillar:hover { transform: translateX(6px); box-shadow: var(--shadow-2); }
+  .pillar > span { width: 3rem; height: 3rem; border-radius: 14px; display: grid; place-items: center; background: var(--aqua-100); color: var(--navy-900); }
+  .pillar > span :global(svg) { width: 1.4rem; height: 1.4rem; }
+  .pillar p { color: var(--ink-2); font-size: 1rem; margin-top: .3rem; }
+  @media (max-width: 900px) { .mission { grid-template-columns: 1fr; } }
+
+  .vet { background: linear-gradient(180deg, var(--navy-950), var(--navy-900)); }
+  .vet__bg { position: absolute; inset: auto 0 0 0; height: 60%; opacity: .2; pointer-events: none; }
+  .vet .container { position: relative; display: grid; gap: clamp(2rem, 4vw, 3.5rem); }
+  .vet__head { display: grid; gap: 1.2rem; justify-items: start; max-width: 48rem; }
+  .vet__badge { display: inline-flex; align-items: center; gap: .6rem; padding: .6rem 1.1rem; border-radius: 999px; font-family: var(--font-mono); font-size: .78rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; background: linear-gradient(100deg, var(--lime-500), var(--lime-300)); color: var(--navy-950); box-shadow: 0 10px 28px -8px rgba(168, 223, 24, .6); }
+  .vet__badge :global(svg) { width: 1.2rem; height: 1.2rem; stroke-width: 2.2; }
+  .values { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1rem, 2vw, 1.6rem); }
+  .value { display: grid; gap: .7rem; align-content: start; padding: clamp(1.4rem, 3vw, 2rem); border-radius: var(--r-lg); background: rgba(255, 255, 255, .06); border: 1px solid var(--line-dark); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform .35s var(--ease), background .35s, border-color .35s; }
+  .value:hover { transform: translateY(-5px); background: rgba(255, 255, 255, .1); border-color: rgba(168, 223, 24, .5); }
+  .value__icon { width: 3.1rem; height: 3.1rem; border-radius: 14px; display: grid; place-items: center; background: rgba(168, 223, 24, .14); color: var(--lime-500); border: 1px solid rgba(168, 223, 24, .3); }
+  .value__icon :global(svg) { width: 1.45rem; height: 1.45rem; }
+  .value p { color: rgba(255, 255, 255, .74); font-size: 1rem; }
+  @media (max-width: 1000px) { .values { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .values { grid-template-columns: 1fr; } }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .stats li { display: grid; gap: .3rem; justify-items: center; text-align: center; padding: 1.6rem 1rem; border-radius: var(--r-md); background: var(--paper); border: 1px solid var(--line); }
+  .stats strong { font-family: var(--font-display); font-weight: 780; font-size: clamp(2.2rem, 1.5rem + 2.4vw, 3.4rem); line-height: 1; letter-spacing: -0.04em;
+    background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .stats span { color: var(--ink-2); font-size: .95rem; }
+  .stats__note { text-align: center; margin-top: 1rem; color: var(--muted); font-size: .85rem; }
+  @media (max-width: 760px) { .stats { grid-template-columns: 1fr 1fr; } }
+
+  .practice__inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem; }
+  .practice__inner > div:first-child { display: grid; gap: 1rem; max-width: 40rem; }
+  .practice__links { display: grid; gap: 1.1rem; justify-items: start; }
+</style>

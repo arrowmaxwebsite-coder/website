@@ -1,0 +1,252 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import StaticPair from '../components/StaticPair.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { SITE } from '../config';
+
+import hallwayBefore from '../assets/photos/ba-hallway-before.jpg';
+import hallwayAfter from '../assets/photos/ba-hallway-after.jpg';
+import spotsBefore from '../assets/photos/ba-spots-before.jpg';
+import spotsAfter from '../assets/photos/ba-spots-after.jpg';
+import brownBefore from '../assets/photos/ba-brown-before.jpg';
+import brownAfter from '../assets/photos/ba-brown-after.jpg';
+import officeBefore from '../assets/photos/ba-office-before.jpg';
+import officeAfter from '../assets/photos/ba-office-after.jpg';
+import patternBefore from '../assets/photos/ba-pattern-before.jpg';
+import patternAfter from '../assets/photos/ba-pattern-after.jpg';
+
+import wand from '../assets/photos/job-carpet-wand.jpg';
+import machine from '../assets/photos/job-carpet-machine.jpg';
+import tile from '../assets/photos/job-tile-grout.jpg';
+import hardwood from '../assets/photos/job-hardwood.jpg';
+import upholstery from '../assets/photos/job-upholstery.jpg';
+import doorway from '../assets/photos/job-carpet-doorway.jpg';
+import pattern from '../assets/photos/job-carpet-pattern.jpg';
+import hallway from '../assets/photos/job-carpet-hallway.jpg';
+
+const jobs = [
+  { img: wand, cat: 'carpet', alt: 'Carpet extraction wand cleaning brown patterned carpet beside a white door', cap: 'Wand extraction on patterned carpet' },
+  { img: machine, cat: 'carpet', alt: 'Rotary machine cleaning beige carpet, leaving a visibly cleaner stripe', cap: 'Rotary cleaning: the clean stripe says it all' },
+  { img: tile, cat: 'tile', alt: 'Tile cleaning machine on a grimy tile floor with a freshly cleaned path', cap: 'Tile & grout, mid-clean' },
+  { img: hardwood, cat: 'hardwood', alt: 'Glossy hardwood floor with warm, rich color', cap: 'Hardwood floor, freshly cleaned' },
+  { img: upholstery, cat: 'upholstery', alt: 'Cream upholstered chair with one side of the cushion visibly cleaner', cap: 'Upholstery cleaning in progress' },
+  { img: doorway, cat: 'carpet', alt: 'Rotary cleaning tool working on stained carpet at a doorway', cap: 'Treating a stained, high-traffic doorway' },
+  { img: pattern, cat: 'carpet', alt: 'Patterned blue carpet in a hallway being cleaned', cap: 'Patterned carpet in a hallway' },
+  { img: hallway, cat: 'carpet', alt: 'Rotary machine cleaning carpet in a long, narrow hallway', cap: 'Carpet cleaning in a narrow hallway' },
+];
+
+const items = await Promise.all(
+  jobs.map(async (j) => ({ ...j, full: (await getImage({ src: j.img, width: 1400, format: 'jpg', quality: 82 })).src }))
+);
+
+const filters = [
+  { key: 'all', label: 'All photos' },
+  { key: 'carpet', label: 'Carpet' },
+  { key: 'tile', label: 'Tile & grout' },
+  { key: 'hardwood', label: 'Hardwood' },
+  { key: 'upholstery', label: 'Upholstery' },
+];
+---
+
+<Base
+  title="Before & After Floor Cleaning Gallery | ArrowMax"
+  description="Before and after photos from real carpet, tile, hardwood and upholstery cleaning jobs in Westmoreland, Indiana and Cambria County, PA."
+>
+  <PageHero
+    crumb="Gallery"
+    eyebrow="Gallery"
+    title="See our work"
+    accent="in action."
+    lead="A look at recent carpet, tile, and hardwood floor cleaning projects across Westmoreland, Indiana, and Cambria County, PA."
+  />
+
+  <!-- Before / after -->
+  <section class="section" id="before-after">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Before &amp; after</p>
+        <h2>Same floors. Very different result.</h2>
+        <p>Drag the handle on the first three to compare. Every photo is from a real job.</p>
+      </div>
+
+      <div class="ba-grid">
+        <div data-reveal>
+          <BeforeAfter before={hallwayBefore} after={hallwayAfter}
+            beforeAlt="Hallway carpet before cleaning: dull and dark" afterAlt="The same hallway carpet after cleaning: bright with a clean diamond pattern"
+            caption="Hallway carpet" detail="Traffic wear gone" />
+        </div>
+        <div data-reveal style="--d:.08s">
+          <BeforeAfter before={spotsBefore} after={spotsAfter}
+            beforeAlt="Light carpet before cleaning with dark spots" afterAlt="The same light carpet after cleaning, spots gone"
+            caption="Spots and stains" detail="Light carpet" />
+        </div>
+        <div data-reveal style="--d:.16s">
+          <BeforeAfter before={brownBefore} after={brownAfter}
+            beforeAlt="Brown carpet before cleaning, dark with deep-set dirt" afterAlt="Brown carpet after cleaning, lighter and fresher"
+            caption="Deep-set dirt" detail="Brown carpet" />
+        </div>
+        <div data-reveal>
+          <StaticPair before={officeBefore} after={officeAfter}
+            beforeAlt="Office carpet before cleaning with large dark stains" afterAlt="Office carpet after cleaning, clean and even"
+            caption="Office carpet" detail="Large stains lifted" />
+        </div>
+        <div data-reveal style="--d:.08s">
+          <StaticPair direction="side" before={patternBefore} after={patternAfter} ratio="4 / 5"
+            beforeAlt="Patterned carpet before cleaning, dull and grey" afterAlt="Patterned carpet after cleaning, colors bright again"
+            caption="Patterned carpet" detail="Color and contrast restored" />
+        </div>
+        <div class="ba-cta" data-reveal style="--d:.16s">
+          <p class="eyebrow">Your floors next</p>
+          <h3>Want results like these?</h3>
+          <p>Tell us about your floors and we’ll give you a straight answer on price.</p>
+          <a class="btn btn--primary" href="/contact">Get your free quote <Icon name="arrow" class="i-arrow" /></a>
+          <a class="link-arrow" href={SITE.phoneHref}>or call {SITE.phone}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- On the job -->
+  <section class="section section--paper" id="on-the-job">
+    <div class="container">
+      <div class="section-head section-head--row" data-reveal>
+        <div class="gal-head">
+          <p class="eyebrow">On the job</p>
+          <h2>A look at recent projects</h2>
+          <p>{items.length} photos · tap to enlarge</p>
+        </div>
+        <div class="filters" role="group" aria-label="Filter photos">
+          {filters.map((f, i) => <button type="button" class="filter" data-filter={f.key} aria-pressed={i === 0 ? 'true' : 'false'}>{f.label}</button>)}
+        </div>
+      </div>
+
+      <ul class="gal" data-gallery>
+        {
+          items.map((it, i) => (
+            <li class="gal__item" data-cat={it.cat}>
+              <button type="button" class="gal__btn" data-full={it.full} data-cap={it.cap} data-alt={it.alt} aria-label={`Enlarge photo: ${it.cap}`}>
+                <Image src={it.img} alt={it.alt} widths={[360, 560]} sizes="(min-width: 900px) 360px, (min-width: 560px) 45vw, 92vw" loading="lazy" />
+                <span class="gal__cap">{it.cap}</span>
+                <span class="gal__zoom"><Icon name="expand" /></span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+
+  <dialog class="lb" id="lightbox" aria-label="Photo viewer">
+    <button class="lb__x" type="button" aria-label="Close" data-lb-close><Icon name="x" /></button>
+    <button class="lb__nav lb__nav--prev" type="button" aria-label="Previous photo" data-lb-prev><Icon name="chevron-left" /></button>
+    <figure class="lb__fig">
+      <img class="lb__img" alt="" />
+      <figcaption class="lb__cap"></figcaption>
+    </figure>
+    <button class="lb__nav lb__nav--next" type="button" aria-label="Next photo" data-lb-next><Icon name="chevron-right" /></button>
+  </dialog>
+</Base>
+
+<style>
+  .ba-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 3vw, 2.4rem); align-items: start; }
+  .ba-grid > div { min-width: 0; }
+  .ba-cta {
+    display: grid; gap: 1rem; align-content: center; justify-items: start; padding: clamp(1.6rem, 3vw, 2.4rem); border-radius: var(--r-lg);
+    background: linear-gradient(140deg, var(--navy-900), var(--navy-800)); color: #fff; box-shadow: var(--shadow-2); aspect-ratio: 4 / 5; min-width: 0;
+  }
+  .ba-cta .eyebrow { color: var(--lime-500); }
+  .ba-cta p:not(.eyebrow) { color: rgba(255, 255, 255, .8); }
+  .ba-cta .link-arrow { color: #fff; }
+  @media (max-width: 900px) { .ba-grid { grid-template-columns: 1fr 1fr; } .ba-cta { aspect-ratio: auto; } }
+  @media (max-width: 600px) { .ba-grid { grid-template-columns: 1fr; max-width: 30rem; margin-inline: auto; } }
+
+  .gal-head { display: grid; gap: 1rem; }
+  .gal-head p:last-child { color: var(--muted); }
+  .filters { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .filter {
+    padding: .55rem 1.05rem; border-radius: 999px; border: 1.5px solid rgba(0, 34, 68, .18); background: #fff; color: var(--navy-900);
+    font-weight: 600; font-size: .92rem; transition: all .2s;
+  }
+  .filter:hover { border-color: var(--navy-700); }
+  .filter[aria-pressed='true'] { background: var(--navy-900); color: #fff; border-color: var(--navy-900); }
+
+  .gal { columns: 3; column-gap: clamp(1rem, 2vw, 1.5rem); }
+  .gal__item { break-inside: avoid; margin-bottom: clamp(1rem, 2vw, 1.5rem); }
+  .gal__item[hidden] { display: none; }
+  .gal__btn { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: var(--r-md); overflow: hidden; background: var(--navy-900); box-shadow: var(--shadow-1); cursor: zoom-in; text-align: left; }
+  .gal__btn :global(img) { width: 100%; height: auto; transition: transform .9s var(--ease); }
+  .gal__btn:hover :global(img) { transform: scale(1.05); }
+  .gal__btn::after { content: ''; position: absolute; inset: auto 0 0 0; height: 50%; background: linear-gradient(0deg, rgba(0, 23, 48, .8), transparent); opacity: 0; transition: opacity .35s; }
+  .gal__btn:hover::after, .gal__btn:focus-visible::after { opacity: 1; }
+  .gal__cap { position: absolute; z-index: 2; left: 1rem; right: 3.4rem; bottom: .9rem; color: #fff; font-weight: 600; font-size: .95rem; line-height: 1.25; opacity: 0; transform: translateY(8px); transition: all .35s var(--ease); }
+  .gal__btn:hover .gal__cap, .gal__btn:focus-visible .gal__cap { opacity: 1; transform: none; }
+  .gal__zoom { position: absolute; z-index: 2; top: .8rem; right: .8rem; width: 2.4rem; height: 2.4rem; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .92); color: var(--navy-900); opacity: 0; transform: scale(.8); transition: all .3s var(--ease); }
+  .gal__zoom :global(svg) { width: 1.1rem; height: 1.1rem; }
+  .gal__btn:hover .gal__zoom, .gal__btn:focus-visible .gal__zoom { opacity: 1; transform: none; }
+  @media (hover: none) { .gal__cap, .gal__zoom { opacity: 1; transform: none; } .gal__btn::after { opacity: 1; } }
+  @media (max-width: 900px) { .gal { columns: 2; } }
+  @media (max-width: 560px) { .gal { columns: 1; } }
+
+  /* lightbox */
+  .lb { border: 0; padding: 0; background: transparent; max-width: none; max-height: none; width: 100vw; height: 100dvh; color: #fff; }
+  .lb[open] { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .5rem; padding: 1rem; }
+  .lb::backdrop { background: rgba(0, 14, 30, .92); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  .lb__fig { display: grid; gap: .9rem; justify-items: center; min-width: 0; max-height: calc(100dvh - 2rem); }
+  .lb__img { max-width: 100%; max-height: calc(100dvh - 7rem); width: auto; height: auto; border-radius: var(--r-md); box-shadow: var(--shadow-2); object-fit: contain; }
+  .lb__cap { font-family: var(--font-display); font-size: 1.15rem; text-align: center; }
+  .lb__x, .lb__nav { width: 3rem; height: 3rem; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .3); background: rgba(255, 255, 255, .1); color: #fff; display: grid; place-items: center; transition: background .2s; }
+  .lb__x:hover, .lb__nav:hover { background: var(--lime-500); color: var(--navy-950); }
+  .lb__x { position: absolute; top: 1rem; right: 1rem; z-index: 2; }
+  .lb__nav :global(svg), .lb__x :global(svg) { width: 1.4rem; height: 1.4rem; }
+  @media (max-width: 600px) {
+    .lb[open] { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+    .lb__nav { position: absolute; bottom: 1rem; }
+    .lb__nav--prev { left: 1rem; } .lb__nav--next { right: 1rem; }
+  }
+</style>
+
+<script>
+  // ---- filters ----
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter');
+  const items = document.querySelectorAll<HTMLElement>('.gal__item');
+  filterBtns.forEach((b) =>
+    b.addEventListener('click', () => {
+      filterBtns.forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+      const key = b.dataset.filter;
+      items.forEach((it) => { it.hidden = key !== 'all' && it.dataset.cat !== key; });
+    })
+  );
+
+  // ---- lightbox ----
+  const dlg = document.querySelector<HTMLDialogElement>('#lightbox')!;
+  const img = dlg.querySelector<HTMLImageElement>('.lb__img')!;
+  const cap = dlg.querySelector<HTMLElement>('.lb__cap')!;
+  let idx = 0;
+  const visible = () => [...document.querySelectorAll<HTMLButtonElement>('.gal__item:not([hidden]) .gal__btn')];
+  const show = (i: number) => {
+    const list = visible();
+    if (!list.length) return;
+    idx = (i + list.length) % list.length;
+    const b = list[idx];
+    img.src = b.dataset.full || '';
+    img.alt = b.dataset.alt || '';
+    cap.textContent = b.dataset.cap || '';
+  };
+  document.querySelectorAll<HTMLButtonElement>('.gal__btn').forEach((b) =>
+    b.addEventListener('click', () => { show(visible().indexOf(b)); dlg.showModal(); })
+  );
+  dlg.querySelector('[data-lb-close]')?.addEventListener('click', () => dlg.close());
+  dlg.querySelector('[data-lb-prev]')?.addEventListener('click', () => show(idx - 1));
+  dlg.querySelector('[data-lb-next]')?.addEventListener('click', () => show(idx + 1));
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+</script>

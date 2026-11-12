@@ -1,0 +1,133 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { SITE } from '../../config';
+import { SERVICES } from '../../data/content';
+---
+
+<Base
+  title="Carpet, Tile, Hardwood & Rug Cleaning Services | ArrowMax"
+  description="Carpet, tile and grout, hardwood, upholstery, pet urine and rug cleaning across Westmoreland, Indiana and Cambria County, PA. Get a free quote."
+  crumbs={[{ label: 'Services' }]}
+>
+  <PageHero
+    crumbs={[{ label: 'Services' }]}
+    eyebrow="Services"
+    title="Six services."
+    accent="One straight answer on price."
+    lead="Carpet, tile and grout, hardwood, upholstery, pet urine treatment and rugs: each cleaned with the method that’s right for the surface."
+  >
+    <div class="phero__cta">
+      <a class="btn btn--primary btn--lg" href="/contact">Get your free quote <Icon name="arrow" class="i-arrow" /></a>
+      <a class="btn btn--ghost btn--lg" href={SITE.phoneHref}><Icon name="phone" /> {SITE.phone}</a>
+    </div>
+  </PageHero>
+
+  <div class="jump" aria-label="Jump to a service">
+    <div class="container jump__inner">
+      {SERVICES.map((s) => <a href={`#${s.slug}`}><Icon name={s.icon} /> {s.title}</a>)}
+    </div>
+  </div>
+
+  <div class="svc-list">
+    {
+      SERVICES.map((s, i) => (
+        <section class:list={['row', i % 2 === 1 && 'row--flip', i % 2 === 1 ? 'section--paper' : '']} id={s.slug}>
+          <div class="container row__grid">
+            <div class="row__media" data-reveal>
+              <a class="row__frame" href={`/services/${s.slug}`} aria-label={`${s.title} details`} tabindex="-1">
+                <Image src={s.image} alt={s.imageAlt} widths={[480, 760]} sizes="(min-width: 900px) 520px, 92vw" loading={i === 0 ? 'eager' : 'lazy'} />
+              </a>
+              <span class="row__num">0{i + 1}</span>
+            </div>
+            <div class="row__copy" data-reveal style="--d:.1s">
+              <span class="row__icon"><Icon name={s.icon} /></span>
+              <h2>{s.title}</h2>
+              <p class="lead">{s.long}</p>
+              <ul class="row__points">
+                {s.points.map((p) => <li><Icon name="check" /> {p}</li>)}
+              </ul>
+              <div class="row__cta">
+                <a class="btn btn--primary" href={`/services/${s.slug}`}>Explore {s.title.toLowerCase()} <Icon name="arrow" class="i-arrow" /></a>
+                <a class="link-arrow" href={`/contact?service=${s.slug}`}>Get a quote</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <section class="section section--navy notsure on-dark">
+    <div class="container notsure__inner" data-reveal>
+      <div>
+        <p class="eyebrow">Not sure?</p>
+        <h2>Not sure which service you need?</h2>
+        <p class="lead">Tell us about your floors and we’ll give you a straight answer on price.</p>
+      </div>
+      <a class="btn btn--primary btn--lg" href="/contact">Get your free quote <Icon name="arrow" class="i-arrow" /></a>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style is:global>
+  /* leave room for the sticky header AND the sticky "jump to a service" bar when following #anchors */
+  html { scroll-padding-top: calc(var(--header-h) + 78px); }
+</style>
+
+<style>
+  .phero__cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .6rem; }
+
+  .jump { position: sticky; top: var(--header-h); z-index: 50; background: rgba(255, 255, 255, .92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); margin-top: -1px; }
+  .jump__inner { display: flex; gap: .5rem; overflow-x: auto; padding-block: .8rem; scrollbar-width: none; }
+  .jump__inner::-webkit-scrollbar { display: none; }
+  .jump a {
+    display: inline-flex; align-items: center; gap: .5rem; flex: none; padding: .5rem .95rem; border-radius: 999px; text-decoration: none;
+    font-weight: 600; font-size: .92rem; color: var(--navy-900); border: 1px solid var(--line); background: #fff; transition: all .2s;
+  }
+  .jump a :global(svg) { width: 1.05em; height: 1.05em; color: var(--lime-600); }
+  .jump a:hover { background: var(--navy-900); color: #fff; border-color: var(--navy-900); }
+  .jump a:hover :global(svg) { color: var(--lime-500); }
+
+  .row { padding-block: clamp(3.5rem, 7vw, 6.5rem); }
+  .row__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+  .row--flip .row__media { order: 2; }
+  .row__media { position: relative; }
+  .row__frame { display: block; position: relative; border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 5 / 4; box-shadow: var(--shadow-2); background: var(--navy-900); }
+  .row__frame::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18); pointer-events: none; }
+  .row__frame :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+  .row__media:hover .row__frame :global(img) { transform: scale(1.05); }
+  .row__media::before {
+    content: ''; position: absolute; z-index: -1; inset: 16px -16px -16px 16px; border-radius: 34px;
+    background: linear-gradient(140deg, var(--lime-500), var(--aqua-500)); opacity: .85;
+  }
+  .row--flip .row__media::before { inset: 16px 16px -16px -16px; }
+  .row__num {
+    position: absolute; top: 1rem; left: 1rem; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; padding: .4rem .75rem; border-radius: 999px;
+    background: rgba(0, 23, 48, .72); color: var(--lime-500); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .row__copy { display: grid; gap: 1.2rem; justify-items: start; }
+  .row__icon { width: 3.4rem; height: 3.4rem; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(120deg, var(--lime-500), var(--lime-300)); color: var(--navy-950); box-shadow: 0 10px 24px -8px rgba(168, 223, 24, .8); }
+  .row__icon :global(svg) { width: 1.7rem; height: 1.7rem; }
+  .row__points { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem 1.5rem; }
+  .row__points li { display: flex; align-items: center; gap: .6rem; font-weight: 560; color: var(--ink); }
+  .row__points :global(svg) { flex: none; width: 1.3rem; height: 1.3rem; padding: .22rem; border-radius: 50%; background: var(--lime-500); color: var(--navy-950); stroke-width: 3; }
+  .row__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem; margin-top: .6rem; }
+  .row__media, .row__copy { min-width: 0; }
+  .row__cta .btn { white-space: normal; text-align: center; }
+  @media (max-width: 900px) {
+    .row__grid { grid-template-columns: minmax(0, 1fr); }
+    .row--flip .row__media { order: 0; }
+    .row__media::before, .row--flip .row__media::before { inset: 12px -10px -12px 10px; }
+  }
+  @media (max-width: 480px) { .row__points { grid-template-columns: 1fr; } }
+
+  .notsure { background: linear-gradient(120deg, var(--navy-900), var(--navy-800)); padding-block: clamp(3rem, 6vw, 5rem); }
+  .notsure__inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem; }
+  .notsure__inner > div { display: grid; gap: .9rem; max-width: 40rem; }
+</style>

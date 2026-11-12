@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { Service } from '../data/content';
+
+interface Props { service: Service; index?: number; delay?: number }
+const { service: s, index, delay = 0 } = Astro.props;
+---
+
+<li class="svc" data-reveal style={`--d:${delay}s`}>
+  <div class="svc__img">
+    <Image src={s.image} alt={s.imageAlt} widths={[420, 640]} sizes="(min-width: 980px) 380px, (min-width: 620px) 45vw, 92vw" loading="lazy" />
+    {index !== undefined && <span class="svc__num">0{index + 1}</span>}
+  </div>
+  <div class="svc__body">
+    <span class="svc__icon"><Icon name={s.icon} /></span>
+    <h3><a href={`/services/${s.slug}`} class="svc__link">{s.title}</a></h3>
+    <p>{s.blurb}</p>
+    <span class="svc__more">Learn more <Icon name="arrow" /></span>
+  </div>
+</li>
+
+<style>
+  .svc {
+    position: relative; display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line);
+    border-radius: var(--r-lg); overflow: hidden; transition: transform .4s var(--ease), box-shadow .4s var(--ease), border-color .3s;
+  }
+  .svc:hover { transform: translateY(-6px); box-shadow: var(--shadow-2); border-color: rgba(78, 199, 238, .6); }
+  .svc__img { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--navy-900); }
+  .svc__img :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease); }
+  .svc:hover .svc__img :global(img) { transform: scale(1.07); }
+  .svc__img::after { content: ''; position: absolute; inset: auto 0 0 0; height: 45%; background: linear-gradient(0deg, rgba(0, 23, 48, .55), transparent); }
+  .svc__num {
+    position: absolute; z-index: 2; top: .9rem; left: .9rem; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em; font-weight: 500;
+    background: rgba(0, 23, 48, .7); color: var(--lime-500); padding: .35rem .65rem; border-radius: 999px; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .svc__body { position: relative; display: grid; gap: .7rem; padding: 2.1rem 1.5rem 1.6rem; align-content: start; flex: 1; }
+  .svc__icon {
+    position: absolute; top: -1.6rem; right: 1.4rem; width: 3.2rem; height: 3.2rem; border-radius: 16px; display: grid; place-items: center; z-index: 3;
+    background: linear-gradient(120deg, var(--lime-500), var(--lime-300)); color: var(--navy-950); box-shadow: 0 10px 24px -8px rgba(168, 223, 24, .8);
+  }
+  .svc__icon :global(svg) { width: 1.55rem; height: 1.55rem; }
+  .svc__link { text-decoration: none; }
+  .svc__link::after { content: ''; position: absolute; inset: 0; z-index: 4; } /* whole card is clickable */
+  .svc p { color: var(--ink-2); font-size: 1rem; }
+  .svc__more { display: inline-flex; align-items: center; gap: .5rem; margin-top: .4rem; font-weight: 650; color: var(--navy-700); }
+  .svc__more :global(svg) { width: 1.1em; height: 1.1em; transition: transform .3s var(--ease); }
+  .svc:hover .svc__more :global(svg) { transform: translateX(5px); }
+</style>
