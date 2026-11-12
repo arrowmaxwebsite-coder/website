@@ -33,10 +33,10 @@ npm run prep:brand   # re-generate favicon + social-share image
   /areas/indiana-county
   /areas/cambria-county
 /gallery                           Before & after + job photos
-/resources                         Educational "know what you're dealing with" content (carpet, pet urine, mattress/upholstery)
 /about                             About ArrowMax
   /about/mission-and-values        Mission, veteran owned & operated, values
   /about/faqs                      FAQs grouped by topic (+ FAQPage structured data)
+  /about/resources                 Educational "know what you're dealing with" content (carpet, pet urine, mattress/upholstery)
 /contact                           Contact Us (listed under About in the menu; URL kept from the old site)
 /privacy-policy  /terms            Legal (drafts, see checklist)
 ```

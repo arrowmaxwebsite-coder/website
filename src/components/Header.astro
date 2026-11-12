@@ -32,7 +32,6 @@ const groups: Group[] = [
     ],
   },
   { label: 'Gallery', href: '/gallery' },
-  { label: 'Resources', href: '/resources' },
 ];
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
@@ -235,13 +234,13 @@ const isActive = (g: Group) =>
   .mgroup__list a[aria-current='page'] :global(svg) { color: var(--lime-500); }
   .mobile-menu__foot { display: grid; gap: .8rem; }
 
-  /* six menu items: trim spacing on mid-size screens so everything still fits on one line */
+  /* trim spacing on mid-size screens so all five menu items still fit on one line */
   @media (max-width: 1320px) {
     .site-header__inner { gap: 1rem; }
     .nav__link { padding: .55rem .72rem; font-size: .94rem; }
   }
   @media (max-width: 1240px) { .header-phone__text small { display: none; } }
-  @media (max-width: 1180px) {
+  @media (max-width: 1140px) {
     .nav, .header-phone, .header-cta { display: none; }
     .menu-btn { display: grid; }
     .header-actions { margin-left: auto; }
@@ -268,5 +267,5 @@ const isActive = (g: Group) =>
   btn?.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
   menu?.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setOpen(false); });
   window.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
-  window.matchMedia('(min-width: 1181px)').addEventListener('change', (m) => { if (m.matches) setOpen(false); });
+  window.matchMedia('(min-width: 1141px)').addEventListener('change', (m) => { if (m.matches) setOpen(false); });
 </script>

@@ -1,14 +1,14 @@
 ---
 import { Image } from 'astro:assets';
-import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
-import Icon from '../components/Icon.astro';
-import FaqList from '../components/FaqList.astro';
-import CtaBand from '../components/CtaBand.astro';
-import { SITE } from '../config';
-import { RESOURCES, FAQS, serviceBySlug } from '../data/content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import FaqList from '../../components/FaqList.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { SITE } from '../../config';
+import { RESOURCES, FAQS, serviceBySlug } from '../../data/content';
 
-const crumbs = [{ label: 'Resources' }];
+const crumbs = [{ label: 'About', href: '/about' }, { label: 'Resources' }];
 // Questions that go with these three topics (allergens, pet urine, upholstery)
 const faqs = FAQS.filter((f) => f.tags?.some((t) => ['pet-urine-treatment', 'upholstery-cleaning', 'carpet-cleaning'].includes(t)) && !f.tags?.includes('all')).slice(0, 4);
 ---

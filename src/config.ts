@@ -92,5 +92,6 @@ export const ABOUT_LINKS = [
   { href: '/about', label: 'About ArrowMax', icon: 'home', desc: 'Who we are' },
   { href: '/about/mission-and-values', label: 'Our Mission & Values', icon: 'shield', desc: 'Veteran owned & operated' },
   { href: '/about/faqs', label: 'FAQs', icon: 'help', desc: 'Straight answers' },
+  { href: '/about/resources', label: 'Resources', icon: 'eye', desc: 'What builds up in your home' },
   { href: '/contact', label: 'Contact Us', icon: 'mail', desc: 'Free quote, no pressure' },
 ] as const;
