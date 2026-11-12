@@ -80,9 +80,38 @@ For a new before/after slider, use `<BeforeAfter before={…} after={…} />` wi
 
 ## Deploying
 
-`npm run build`, then publish the `dist/` folder to any static host (Netlify, Cloudflare Pages, Vercel,
-GitHub Pages, or the existing host). `site` in `astro.config.mjs` is already set to the live domain, which drives
-the sitemap and canonical URLs.
+The site is a static build (`dist/`), deployed to **Cloudflare** as a Worker with static assets. The setup lives in
+`wrangler.jsonc`; `.node-version` pins Node 24 (Astro 7 needs Node ≥ 22.23.4). `site` in `astro.config.mjs` is
+already set to the live domain, which drives the sitemap and canonical URLs.
+
+### GitHub → Cloudflare (automatic deploys)
+
+In the Cloudflare dashboard: **Workers & Pages → Create → Import a repository** → pick
+`arrowmaxwebsite-coder/website`, then use:
+
+| Setting                         | Value                                                         |
+| ------------------------------- | ------------------------------------------------------------- |
+| Production branch               | `main`                                                        |
+| Build command                   | `npm run build`                                               |
+| Deploy command                  | `npx wrangler deploy`                                         |
+| Non-production branch deploy    | `npx wrangler versions upload` (gives each branch a preview URL) |
+| Root directory                  | `/` (leave blank)                                             |
+
+Every push to `main` then builds and publishes automatically.
+
+- The `name` in `wrangler.jsonc` **must match the Worker's name** in the dashboard. If a build fails with a
+  name-mismatch error, change `name` to the one it reports.
+- Custom domain: add `www.arrowmaxcleanwpa.com` in the dashboard under **Settings → Domains & Routes** when you're ready to
+  go live. It isn't in `wrangler.jsonc` on purpose, so deploying can't take the live domain over early.
+- Pages are served at trailing-slash URLs (`/about/`); `/about` redirects there, and unknown URLs show `dist/404.html`
+  with a real 404 status.
+
+### Manual deploys and local preview
+
+```bash
+npm run deploy       # builds, then publishes with Wrangler (asks you to log in the first time)
+npm run cf:preview   # build, then serve exactly what Cloudflare will serve, at http://localhost:8787
+```
 
 ## Before going live — checklist
 

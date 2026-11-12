@@ -5,3 +5,8 @@ dist/
 .env.*
 .DS_Store
 Thumbs.db
+
+# Cloudflare / Wrangler
+.wrangler/
+.dev.vars
+.dev.vars.*

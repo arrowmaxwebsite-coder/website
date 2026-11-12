@@ -1,0 +1,24 @@
+// Cloudflare Workers configuration: serves the static Astro build in ./dist as a Worker with static assets.
+// Docs: https://developers.cloudflare.com/workers/static-assets/
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // MUST match the Worker's name in the Cloudflare dashboard (Workers & Pages → your project).
+  // If the GitHub build fails with a name-mismatch error, change this to the name it reports.
+  "name": "website",
+
+  // Pins runtime behaviour. Don't bump this without testing; it must not be later than the installed wrangler supports.
+  "compatibility_date": "2026-11-10",
+
+  "assets": {
+    // `npm run build` writes the site here (Astro's default output folder).
+    "directory": "./dist",
+
+    // Unknown URLs get the site's own branded dist/404.html, with a real 404 status.
+    "not_found_handling": "404-page"
+  }
+
+  // NOTE: no "routes" / custom domain on purpose. Attaching www.arrowmaxcleanwpa.com here would point the live
+  // domain at this Worker on the first deploy. Add the custom domain in the dashboard (Settings → Domains & Routes)
+  // when you're ready to go live.
+}

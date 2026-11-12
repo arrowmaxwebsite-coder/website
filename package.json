@@ -9,7 +9,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "prep:images": "node scripts/prep-images.mjs",
-    "prep:brand": "node scripts/make-brand-assets.mjs"
+    "prep:brand": "node scripts/make-brand-assets.mjs",
+    "deploy": "npm run build && wrangler deploy",
+    "cf:preview": "npm run build && wrangler dev"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -18,5 +20,8 @@
     "@fontsource-variable/geist-mono": "^5.3.0",
     "astro": "^7.4.11",
     "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "wrangler": "^4.160.1"
   }
 }
