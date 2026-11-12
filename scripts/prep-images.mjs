@@ -12,15 +12,21 @@ const SRC = 'assets-source';
 const OUT = 'src/assets/photos';
 await mkdir(OUT, { recursive: true });
 
-/** @param {string} out @param {string} input @param {{extract?: {left:number,top:number,width:number,height:number}, width?: number, quality?: number, flatten?: boolean}} o */
-async function make(out, input, { extract, width = 1600, quality = 82, flatten = false } = {}) {
+/** @param {string} out @param {string} input @param {{extract?: {left:number,top:number,width:number,height:number}, width?: number, quality?: number, flatten?: boolean, enhance?: boolean}} o */
+async function make(out, input, { extract, width = 1600, quality = 82, flatten = false, enhance = false } = {}) {
   // 1) normalise orientation first so crop coordinates refer to what you actually see
   let buf = await sharp(path.join(SRC, input)).rotate().toBuffer();
   let img = sharp(buf);
   if (flatten) img = img.flatten({ background: '#ffffff' });
   if (extract) img = img.extract(extract);
+  if (enhance) {
+    // Very low-resolution source: light denoise (so sharpening doesn't amplify JPEG blocks), a smooth upscale
+    // to `width`, then unsharp-mask to rebuild edges. Best-effort only: a larger original photo will always beat this.
+    img = img.median(3).resize({ width, kernel: 'lanczos3' }).sharpen({ sigma: 1.8, m1: 1.0, m2: 3.5 });
+  } else {
+    img = img.resize({ width, withoutEnlargement: true });
+  }
   const info = await img
-    .resize({ width, withoutEnlargement: true })
     .jpeg({ quality, mozjpeg: true })
     .toFile(path.join(OUT, out));
   console.log(`${out.padEnd(34)} ${info.width}x${info.height}  ${(info.size / 1024).toFixed(0)} KB`);
@@ -36,6 +42,9 @@ await make('ba-spots-after.jpg', 'carpet-before-after-1.jpg', { extract: { left:
 // Brown carpet (stacked composite -> top = before, bottom = after)
 await make('ba-brown-before.jpg', 'carpet-before-after-brown.jpg', { extract: { left: 600, top: 24, width: 613, height: 766 }, width: 900 });
 await make('ba-brown-after.jpg', 'carpet-before-after-brown.jpg', { extract: { left: 600, top: 1130, width: 613, height: 766 }, width: 900 });
+// Brown carpet, WIDE 3:2 crop for the homepage hero (high-res original, so it stays crisp when shown large)
+await make('ba-brown-wide-before.jpg', 'carpet-before-after-brown.jpg', { extract: { left: 360, top: 24, width: 1149, height: 766 }, width: 1200, quality: 84 });
+await make('ba-brown-wide-after.jpg', 'carpet-before-after-brown.jpg', { extract: { left: 360, top: 1130, width: 1149, height: 766 }, width: 1200, quality: 84 });
 // Office carpet (stacked: top = before, bottom = after) – different framing, shown as a static pair
 await make('ba-office-before.jpg', 'carpet-before-after-office.jpg', { extract: { left: 0, top: 50, width: 746, height: 372 }, width: 1000 });
 await make('ba-office-after.jpg', 'carpet-before-after-office.jpg', { extract: { left: 0, top: 450, width: 746, height: 372 }, width: 1000 });
@@ -49,7 +58,7 @@ await make('job-carpet-machine.jpg', 'carpet-cleaning-machine.jpg', { width: 110
 await make('job-carpet-doorway.jpg', 'carpet-cleaning-doorway.jpg', { width: 1000 });
 await make('job-carpet-hallway.jpg', 'carpet-cleaning-hallway.jpg', { width: 1600 });
 await make('job-carpet-pattern.jpg', 'carpet-pattern-cleaning.jpg', { width: 1600 });
-await make('job-tile-grout.jpg', 'tile-grout-cleaning.jpg', { width: 800, quality: 88 });
+await make('job-tile-grout.jpg', 'tile-grout-cleaning.jpg', { width: 1131, quality: 90, enhance: true }); // 377px source → 3× + sharpened
 await make('job-hardwood.jpg', 'hardwood-cleaning.jpg', { width: 1000 });
 await make('job-upholstery.jpg', 'upholstery-cleaning.jpg', { width: 1100 });
 // Area rug: cropped from the stock living-room illustration the old site already used (no suitable rug photo supplied)

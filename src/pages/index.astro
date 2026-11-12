@@ -19,8 +19,8 @@ import hallwayBefore from '../assets/photos/ba-hallway-before.jpg';
 import hallwayAfter from '../assets/photos/ba-hallway-after.jpg';
 import spotsBefore from '../assets/photos/ba-spots-before.jpg';
 import spotsAfter from '../assets/photos/ba-spots-after.jpg';
-import brownBefore from '../assets/photos/ba-brown-before.jpg';
-import brownAfter from '../assets/photos/ba-brown-after.jpg';
+import brownWideBefore from '../assets/photos/ba-brown-wide-before.jpg';
+import brownWideAfter from '../assets/photos/ba-brown-wide-after.jpg';
 import officeBefore from '../assets/photos/ba-office-before.jpg';
 import officeAfter from '../assets/photos/ba-office-after.jpg';
 
@@ -44,7 +44,7 @@ const steps = [
           <p class="chip"><span class="chip__dot"></span> Trusted local floor cleaning</p>
           <a class="chip chip--vet" href="/about/mission-and-values"><Icon name="shield" /> Veteran owned &amp; operated</a>
         </div>
-        <h1>Carpet &amp; floor cleaning, <span class="grad-text">done right.</span></h1>
+        <h1>Carpet &amp; Floor Cleaning, <span class="grad-text">Done Right.</span></h1>
         <p class="lead">
           ArrowMax serves Westmoreland, Indiana, and Cambria County, PA with professional carpet, tile, and hardwood floor
           cleaning. Get your free quote today.
@@ -66,11 +66,12 @@ const steps = [
       <div class="hero__visual">
         <div class="hero__frame">
           <BeforeAfter
-            before={hallwayBefore}
-            after={hallwayAfter}
-            beforeAlt="Hallway carpet before cleaning: dull, dark and shadowed with ground-in traffic wear"
-            afterAlt="The same hallway carpet after professional cleaning: bright, with a clean diamond pattern in the pile"
-            caption="Real job · Hallway carpet"
+            before={brownWideBefore}
+            after={brownWideAfter}
+            beforeAlt="Brown carpet before cleaning: dark and dingy with deep-set dirt"
+            afterAlt="The same brown carpet after professional cleaning: noticeably lighter and fresher"
+            caption="Real job · Brown carpet"
+            ratio="3 / 2"
             eager
           />
           <span class="float float--rating"><Icon name="star" /> 5.0 rating</span>
@@ -160,22 +161,24 @@ const steps = [
       <div class="results">
         <div data-reveal>
           <BeforeAfter
+            before={hallwayBefore}
+            after={hallwayAfter}
+            beforeAlt="Hallway carpet before cleaning: dull, dark and shadowed with ground-in traffic wear"
+            afterAlt="The same hallway carpet after professional cleaning: bright, with a clean diamond pattern in the pile"
+            caption="Hallway carpet"
+            detail="Traffic wear gone"
+            ratio="1 / 1"
+          />
+        </div>
+        <div data-reveal style="--d:.1s">
+          <BeforeAfter
             before={spotsBefore}
             after={spotsAfter}
             beforeAlt="Light carpet before cleaning, covered in dark spots and stains"
             afterAlt="The same light carpet after cleaning, even in color with the spots gone"
             caption="Spots and stains"
             detail="Light carpet"
-          />
-        </div>
-        <div data-reveal style="--d:.1s">
-          <BeforeAfter
-            before={brownBefore}
-            after={brownAfter}
-            beforeAlt="Brown carpet before cleaning, dark and dingy with deep-set dirt"
-            afterAlt="Brown carpet after cleaning, noticeably lighter with the pile freshened"
-            caption="Deep-set dirt"
-            detail="Brown carpet"
+            ratio="1 / 1"
           />
         </div>
         <div data-reveal style="--d:.2s">
@@ -186,6 +189,7 @@ const steps = [
             afterAlt="Office carpet after cleaning, clean and uniform"
             caption="Office carpet"
             detail="Large stains lifted"
+            ratio="1 / 1"
           />
         </div>
       </div>
@@ -285,12 +289,12 @@ const steps = [
       radial-gradient(1000px 520px at 88% -8%, rgba(78, 199, 238, .30), transparent 62%),
       radial-gradient(780px 460px at -4% 100%, rgba(168, 223, 24, .17), transparent 60%),
       linear-gradient(180deg, var(--navy-900), var(--navy-950));
-    padding-top: clamp(2.5rem, 5vw, 4.5rem);
+    padding-top: clamp(2rem, 3.5vw, 3.5rem);
   }
   .hero__bg { position: absolute; z-index: -1; inset: auto 0 0 0; height: 62%; opacity: .5; pointer-events: none; }
-  .hero__grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
-  .hero__copy { display: grid; gap: 1.5rem; justify-items: start; }
-  .hero__copy h1 { max-width: 12ch; }
+  .hero__grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(2rem, 4vw, 4.5rem); align-items: center; }
+  .hero__copy { display: grid; gap: 1.25rem; justify-items: start; }
+  .hero__copy h1 { max-width: 13ch; font-size: clamp(2.5rem, 1.1rem + 4.6vw, 4.75rem); }
   .hero__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
   .hero__chips .chip { margin: 0; }
   .chip--vet {
@@ -301,13 +305,13 @@ const steps = [
   .chip--vet :global(svg) { width: 1.15em; height: 1.15em; stroke-width: 2.2; }
   .chip--vet:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -8px rgba(168, 223, 24, .9); }
   .hero__cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .4rem; }
-  .hero__proof { display: grid; gap: .65rem; margin-top: .6rem; color: rgba(255, 255, 255, .82); font-size: .98rem; }
+  .hero__proof { display: flex; flex-wrap: wrap; gap: .65rem 1.8rem; margin-top: .4rem; color: rgba(255, 255, 255, .82); font-size: .98rem; }
   .hero__proof li { display: flex; align-items: center; gap: .7rem; }
   .hero__proof :global(.icon:not(.i-star)) { color: var(--lime-500); width: 1.15em; height: 1.15em; }
   .hero__proof strong { color: #fff; }
 
   .hero__visual { display: grid; justify-items: center; padding: .5rem; }
-  .hero__frame { position: relative; width: min(100%, 31rem); }
+  .hero__frame { position: relative; width: min(100%, 46rem); }
   .hero__frame::before {
     content: ''; position: absolute; inset: -14px -14px 14px 14px; border-radius: 34px; z-index: -1;
     background: linear-gradient(140deg, var(--lime-500), var(--aqua-500)); opacity: .9;
@@ -330,7 +334,7 @@ const steps = [
   .float--air small { font-weight: 500; color: var(--muted); font-size: .78rem; }
   @keyframes bob { 50% { transform: translateY(-7px); } }
 
-  .hero__form { padding-block: clamp(2.5rem, 5vw, 4rem) clamp(2.5rem, 5vw, 4rem); }
+  .hero__form { padding-block: clamp(1.75rem, 3vw, 2.5rem) clamp(2rem, 4vw, 3.25rem); }
 
   @media (max-width: 560px) {
     .hero__copy { justify-items: stretch; }
@@ -342,9 +346,14 @@ const steps = [
     .hero__grid { grid-template-columns: 1fr; }
     .hero__copy h1 { max-width: 14ch; }
     .hero__visual { order: 2; }
-    .hero__frame { width: min(100%, 26rem); }
+    .hero__frame { width: min(100%, 36rem); }
     .float--rating { left: -.4rem; }
     .float--air { right: -.4rem; top: auto; bottom: 4.4rem; }
+  }
+  /* On phones the photo card is short, so let the allergen badge straddle its bottom edge instead of covering the photo/slider hint */
+  @media (max-width: 560px) {
+    .float--air { right: .6rem; bottom: -1.1rem; }
+    .hero__visual { margin-bottom: .9rem; }
   }
 
   .section-head__txt { display: grid; gap: 1rem; }
