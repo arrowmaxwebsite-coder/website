@@ -68,6 +68,6 @@ await make('job-rug.jpg', 'hero-room.png', { extract: { left: 540, top: 905, wid
 await make('cta-mop.jpg', 'mop-cta.jpg', { width: 1600, quality: 80 });
 await make('resource-carpet-fibers.jpg', 'resource-carpet-fibers.png', { width: 1100, flatten: true, quality: 88 });
 await make('resource-urine-diagram.jpg', 'resource-urine-diagram.png', { width: 1100, flatten: true, quality: 88 });
-await make('resource-mattress-diagram.jpg', 'resource-mattress-diagram.png', { width: 1100, flatten: true, quality: 88 });
+await make('resource-mattress-diagram.jpg', 'resource-mattress-diagram-fixed.png', { width: 1100, flatten: true, quality: 88 });
 
 console.log('done');
